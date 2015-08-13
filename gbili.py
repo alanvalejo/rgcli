@@ -84,7 +84,7 @@ def labeled_nearest(vertex_set, graph, labeled, tree, sender):
 	sender.send((buff, dic_nn))
 
 
-def cal_NN(vertex_set, tree, k1, k2, buff, sender, dic_nn):
+def gbili(vertex_set, tree, k1, k2, buff, sender, dic_nn):
 
 	#print k2
 	l = []
@@ -123,31 +123,34 @@ def cal_NN(vertex_set, tree, k1, k2, buff, sender, dic_nn):
 
 if __name__ == '__main__':
 
+	# Parse options command line
 	parser = OptionParser()
-
 	usage = "usage: python %prog [options] args ..."
-	description = """Description"""
-	parser.add_option("-f", "--file", dest="filename", help="read FILE", metavar="FILE")
+	description = """Graph Based on Informativeness of Labeled Instances"""
+	parser.add_option("-f", "--file", dest="filename", help="Input file", metavar="FILE")
 	parser.add_option("-1", "--knn", dest="k", help="knn")
 	parser.add_option("-2", "--semiknn", dest="semik", help="semiknn")
-	parser.add_option("-l", "--labels", dest="labels", help="labels FILE")
-	parser.add_option("-t", "--nthreads", dest="nthreads", help="number of threads", default=4)
-	parser.add_option("-o", "--out", dest="out_filename", help="write FILE", metavar="OUTFILE")
-	parser.add_option("-c", "--ncluster", dest="nclusters", help="number of clusters", metavar="nclusters")
+	parser.add_option("-l", "--labels", dest="labels", help="Labels")
+	parser.add_option("-t", "--nthreads", dest="nthreads", help="Number of threads", default=4)
+	parser.add_option("-o", "--output", dest="output", help="Output file", metavar="FILE")
+	parser.add_option("-c", "--ncluster", dest="nclusters", help="Number of clusters")
 
 	(options, args) = parser.parse_args()
 	filename = options.filename
 	k = int(options.k)			# k1
 	k2 = int(options.semik)			# k2
 	labels_filename = options.labels	# vertices rotulados
-	out_filename = options.out_filename
+	output = options.output
 	n_threads = int(options.nthreads)
 	c = int(options.nclusters)		# numero de clusters
 
 	if filename is None:
 		parser.error("required -f [filename] arg.")
 	if labels_filename is None:
-		parser.error("required -l [labels file] arg.")
+		parser.error("required -l [labels] arg.")
+	if options.output is None:
+	 	filename, extension = os.path.splitext(os.path.basename(options.filename))
+	 	options.output = filename + '.edgelist'
 
 	graph = igraph.Graph()
 	graph.to_undirected()
@@ -210,7 +213,7 @@ if __name__ == '__main__':
 	l_threads = []
 	for i in xrange(0, len(graph.vs()), part ):
 		sender, receiver = Pipe()
-		p = Process(target=cal_NN, args=(graph.vs()[i:i+part], tree, k, k2, buff, sender, dic_nn))
+		p = Process(target=gbili, args=(graph.vs()[i:i+part], tree, k, k2, buff, sender, dic_nn))
 		p.daemon = True
 		p.start()
 		l_threads.append(p)
@@ -224,8 +227,10 @@ if __name__ == '__main__':
 			edges += [edge]
 			weights.append(weight)
 
+	# Insert adges with weights to graph
 	graph.add_edges(edges)
 	graph.es["weight"] = weights
-
 	graph.simplify(combine_edges='first')
-	graph.write(out_filename, format='edgelist')
+
+	# Save gbili graph to edgelist format
+	graph.write(output, format='edgelist')
