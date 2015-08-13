@@ -35,74 +35,74 @@ __license__ = 'GNU GENERAL PUBLIC LICENSE'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
 
-# def labeled_nearest(vertex_set, graph, labeled_set, kdtree, sender):
-# 	"""
-# 	Verify for each vertex which are the nearest labeled vertex set
-# 	Attributes:
-# 		vertex_set ():
-# 		graph (igraph): Set of vertices
-# 		labeled_set ():
-# 		kdtree ():
-# 		sender ():
-# 	"""
+def labeled_nearest(vertex_set, graph, labeled_set, kdtree, sender):
+	"""
+	...
+	Attributes:
+	Returns:
+	"""
 
-# 	buff = dict()
-# 	dic_nn = dict()
-# 	for v in vertex_set:
-# 		if v.index % 10000 == 0:
-# 			print v.index
-# 		min_d = float('inf')
-# 		min_l = -1
-# 		v_pts = [v["x"], v["y"], v["r"], v["g"], v["b"]]
-# 		for u_idx in labeled_set:
-# 			u = graph.vs()[u_idx]
-# 			d = ((v_pts[0] - u["x"])**2 + (v_pts[1] - u["y"])**2 + (v_pts[2] - u["r"])**2 + (v_pts[3] - u["g"])**2 + (v_pts[4] - u["b"])**2)
-# 			if d < min_d:
-# 				min_d = d
-# 				min_l = u_idx
-# 		buff[v.index] = (min_l, min_d)
+	buff = dict()
+	dic_nn = dict()
+	for v in vertex_set:
+		if v.index % 10000 == 0:
+			print v.index
+		min_d = float('inf')
+		min_l = -1
+		v_pts = [v["x"], v["y"], v["r"], v["g"], v["b"]]
+		for u_idx in labeled_set:
+			u = graph.vs()[u_idx]
+			d = ((v_pts[0] - u["x"])**2 + (v_pts[1] - u["y"])**2 + (v_pts[2] - u["r"])**2 + (v_pts[3] - u["g"])**2 + (v_pts[4] - u["b"])**2)
+			if d < min_d:
+				min_d = d
+				min_l = u_idx
+		buff[v.index] = (min_l, min_d)
 
-# 		# atribui lista de k vizinhos mais proximos
-# 		dic_nn[v.index] = kdtree.query(np.array([v_pts]), k=(k+1))
+		# atribui lista de k vizinhos mais proximos
+		dic_nn[v.index] = kdtree.query(np.array([v_pts]), k=(k+1))
 
-# 	sender.send((buff, dic_nn))
+	sender.send((buff, dic_nn))
 
+def gbili(vertex_set, kdtree, k1, k2, buff, sender, dic_nn):
+	"""
+	...
+	Attributes:
+	Returns:
+	"""
 
-# def gbili(vertex_set, kdtree, k1, k2, buff, sender, dic_nn):
+	#print k2
+	l = []
+	for v in vertex_set:
+		if v.index % 10000 == 0:
+			print v.index
 
-# 	#print k2
-# 	l = []
-# 	for v in vertex_set:
-# 		if v.index % 10000 == 0:
-# 			print v.index
+		l_dists = []
+		l_ew = []
+		list_v_nn = dic_nn[v.index] # kdtree.query(np.array([[v["x"], v["y"], v["r"], v["g"], v["b"]]]), k=(k1+1));
+		# for each KNN vertex
+		for i, nn in enumerate(list_v_nn[1][0]):
+			if nn == v.index:
+				continue
+			u = graph.vs()[nn]
+			list_u_nn = dic_nn[nn] #kdtree.query(np.array([[u["x"], u["y"], u["r"], u["g"], u["b"]]]), k=(k1+1))
+			# if it is mutual
+			if v.index in list_u_nn[1][0]:
+				d1 = list_v_nn[0][0][i]
+				(lidx,d2) = buff[u.index] 		# near_labeled(v, pts, labeled, labeled_pts, buff)
+				l_dists.append(d1 + d2)
+				# tuple (edge, weight)
+				l_ew.append(((v.index, nn), 1/(1+d1)))
 
-# 		l_dists = []
-# 		l_ew = []
-# 		list_v_nn = dic_nn[v.index] # kdtree.query(np.array([[v["x"], v["y"], v["r"], v["g"], v["b"]]]), k=(k1+1));
-# 		# for each KNN vertex
-# 		for i, nn in enumerate(list_v_nn[1][0]):
-# 			if nn == v.index:
-# 				continue
-# 			u = graph.vs()[nn]
-# 			list_u_nn = dic_nn[nn] #kdtree.query(np.array([[u["x"], u["y"], u["r"], u["g"], u["b"]]]), k=(k1+1))
-# 			# if it is mutual
-# 			if v.index in list_u_nn[1][0]:
-# 				d1 = list_v_nn[0][0][i]
-# 				(lidx,d2) = buff[u.index] 		# near_labeled(v, pts, labeled, labeled_pts, buff)
-# 				l_dists.append(d1 + d2)
-# 				# tuple (edge, weight)
-# 				l_ew.append(((v.index, nn), 1/(1+d1)))
-
-# 		count = 0
-# 		for idx in np.argsort(l_dists):
-# 			if count < k2:
-# 				# put(edge, weight)  (l_ew[idx][0], l_ew[idx][1])
-# 				l.append(l_ew[idx])
-# 			else:
-# 				break
-# 			count+=1
-# 	#print 'sending %d' %len(l)
-# 	sender.send(l)
+		count = 0
+		for idx in np.argsort(l_dists):
+			if count < k2:
+				# put(edge, weight)  (l_ew[idx][0], l_ew[idx][1])
+				l.append(l_ew[idx])
+			else:
+				break
+			count+=1
+	#print 'sending %d' %len(l)
+	sender.send(l)
 
 def get_attrs(data, object_id):
 	"""
