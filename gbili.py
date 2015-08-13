@@ -20,7 +20,6 @@ import numpy as np
 import threading
 import os
 import random
-import time
 
 from scipy import spatial
 from optparse import OptionParser
@@ -52,11 +51,10 @@ def read_labels(file):
 	return(vertices, labels)
 
 def labeled_nearest(vertex_set, graph, labeled, tree, sender):
-	""" atribui para os rotulados mais proximos
-		busca os vizinhos rotulados mais proximos
+	""" Verify for each vertex which are the nearest labeled vertices
 		Attributes:
 			vertex_set ():
-			graph ():
+			graph (igraph): Set of vertices
 			labeled ():
 			tree ():
 			sender ():
@@ -149,18 +147,14 @@ if __name__ == '__main__':
 	if labels_filename is None:
 		parser.error("required -l [labels file] arg.")
 
-	print k, k2
-
 	graph = igraph.Graph()
 	graph.to_undirected()
 	im = Image.open(filename)
 	pix = im.load()
 	x, y, r, g, b = [], [], [], [], []
 
-	# labeled set
+	# Labeled set
 	labeled, map_labels = read_labels(labels_filename)
-
-	t0 = time.time()
 
 	for j in range(0,im.size[1]):
 		for i in range(0,im.size[0]):
@@ -178,18 +172,14 @@ if __name__ == '__main__':
 			g.append(pix[i,j][1])
 			b.append(pix[i,j][2])
 
-	# print "criou grafo"
-
 	x = np.array(x)
 	y = np.array(y)
 	r = np.array(r)
 	g = np.array(g)
 	b = np.array(b)
 	tree = spatial.KDTree(zip(x.ravel(), y.ravel(), r.ravel(), g.ravel(), b.ravel()))
-	# print "criou kdtree"
 
 	# atribui para os rotulados mais proximos
-	# print "procurando rotulados mais proximos"
 
 	# divide em subconjuntos de vertices pelo numero de threads
 	# subconjunto de vertices (V = {V_1, ..., V_{n_threads})
@@ -227,23 +217,13 @@ if __name__ == '__main__':
 	edges = []
 	weights = []
 	for receiver in lq:
-		# print 'calling receiver'
 		l_ew = receiver.recv()
-		# print 'retornou'
 		for edge, weight in l_ew:
 			edges += [edge]
 			weights.append(weight)
-
-	# write time
-	t1 = time.time()
-	with open('time','a') as f:
-		f.write('%f\t%f\t%f\tgct\n' %(k, k2, (t1 - t0)))
-
-	print len(edges), len(weights)
-	print out_filename
 
 	graph.add_edges(edges)
 	graph.es["weight"] = weights
 
 	graph.simplify(combine_edges='first')
-	graph.write(out_filename, format='ncol')
+	graph.write(out_filename, format='edgelist')
