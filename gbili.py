@@ -33,11 +33,12 @@ __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
 
 def read_labels(file):
-	""" Read file with labels
-		Attributes:
-			file (string): input file whit labels
-		Returns:
-			dictionary: List of vertices <vertice, label>
+	"""
+	Read file with labels
+	Attributes:
+		file (string): input file whit labels
+	Returns:
+		dictionary: List of vertices <vertice, label>
 	"""
 
 	vertices, labels = [], dict()
@@ -51,13 +52,14 @@ def read_labels(file):
 	return(vertices, labels)
 
 def labeled_nearest(vertex_set, graph, labeled, tree, sender):
-	""" Verify for each vertex which are the nearest labeled vertices
-		Attributes:
-			vertex_set ():
-			graph (igraph): Set of vertices
-			labeled ():
-			tree ():
-			sender ():
+	"""
+	Verify for each vertex which are the nearest labeled vertices
+	Attributes:
+		vertex_set ():
+		graph (igraph): Set of vertices
+		labeled ():
+		tree ():
+		sender ():
 	"""
 
 	buff = dict()
