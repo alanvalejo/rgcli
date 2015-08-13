@@ -11,6 +11,9 @@ All rights reserved
 
 To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
+
+Required python igraph library
+.. _igraph: http://igraph.sourceforge.net
 """
 
 import Image
@@ -32,94 +35,99 @@ __license__ = 'GNU GENERAL PUBLIC LICENSE'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
 
-def read_labels(file):
+# def labeled_nearest(vertex_set, graph, labeled_set, kdtree, sender):
+# 	"""
+# 	Verify for each vertex which are the nearest labeled vertex set
+# 	Attributes:
+# 		vertex_set ():
+# 		graph (igraph): Set of vertices
+# 		labeled_set ():
+# 		kdtree ():
+# 		sender ():
+# 	"""
+
+# 	buff = dict()
+# 	dic_nn = dict()
+# 	for v in vertex_set:
+# 		if v.index % 10000 == 0:
+# 			print v.index
+# 		min_d = float('inf')
+# 		min_l = -1
+# 		v_pts = [v["x"], v["y"], v["r"], v["g"], v["b"]]
+# 		for u_idx in labeled_set:
+# 			u = graph.vs()[u_idx]
+# 			d = ((v_pts[0] - u["x"])**2 + (v_pts[1] - u["y"])**2 + (v_pts[2] - u["r"])**2 + (v_pts[3] - u["g"])**2 + (v_pts[4] - u["b"])**2)
+# 			if d < min_d:
+# 				min_d = d
+# 				min_l = u_idx
+# 		buff[v.index] = (min_l, min_d)
+
+# 		# atribui lista de k vizinhos mais proximos
+# 		dic_nn[v.index] = kdtree.query(np.array([v_pts]), k=(k+1))
+
+# 	sender.send((buff, dic_nn))
+
+
+# def gbili(vertex_set, kdtree, k1, k2, buff, sender, dic_nn):
+
+# 	#print k2
+# 	l = []
+# 	for v in vertex_set:
+# 		if v.index % 10000 == 0:
+# 			print v.index
+
+# 		l_dists = []
+# 		l_ew = []
+# 		list_v_nn = dic_nn[v.index] # kdtree.query(np.array([[v["x"], v["y"], v["r"], v["g"], v["b"]]]), k=(k1+1));
+# 		# for each KNN vertex
+# 		for i, nn in enumerate(list_v_nn[1][0]):
+# 			if nn == v.index:
+# 				continue
+# 			u = graph.vs()[nn]
+# 			list_u_nn = dic_nn[nn] #kdtree.query(np.array([[u["x"], u["y"], u["r"], u["g"], u["b"]]]), k=(k1+1))
+# 			# if it is mutual
+# 			if v.index in list_u_nn[1][0]:
+# 				d1 = list_v_nn[0][0][i]
+# 				(lidx,d2) = buff[u.index] 		# near_labeled(v, pts, labeled, labeled_pts, buff)
+# 				l_dists.append(d1 + d2)
+# 				# tuple (edge, weight)
+# 				l_ew.append(((v.index, nn), 1/(1+d1)))
+
+# 		count = 0
+# 		for idx in np.argsort(l_dists):
+# 			if count < k2:
+# 				# put(edge, weight)  (l_ew[idx][0], l_ew[idx][1])
+# 				l.append(l_ew[idx])
+# 			else:
+# 				break
+# 			count+=1
+# 	#print 'sending %d' %len(l)
+# 	sender.send(l)
+
+def get_attrs(data, object_id):
 	"""
-	Read file with labels
+	Acess all attributs of an object
 	Attributes:
-		file (string): input file whit labels
+		data (): Data
+		object_id (): Object identifier
 	Returns:
-		dictionary: List of vertices <vertice, label>
+		array: Attribute set of an object
 	"""
 
-	vertices, labels = [], dict()
-	with open(file, 'r') as f:
-		for line in f:
-			line = line.split()
-			vertex = int(line[0])
-			label = int(line[1])
-			vertices.append(vertex)
-			labels[vertex] = label
-	return(vertices, labels)
+	return data[:,object_id]
 
-def labeled_nearest(vertex_set, graph, labeled, tree, sender):
+def get_attr(data, object_id, attr_id):
 	"""
-	Verify for each vertex which are the nearest labeled vertices
+	Acess attribute value
 	Attributes:
-		vertex_set ():
-		graph (igraph): Set of vertices
-		labeled ():
-		tree ():
-		sender ():
+		data (np.array): Data
+		object_id (int): Object identifier
+		attr_id (int): Attribute identifier
+	Returns:
+		int: Attribute value
 	"""
 
-	buff = dict()
-	dic_nn = dict()
-	for v in vertex_set:
-		if v.index % 10000 == 0:
-			print v.index
-		min_d = float('inf')
-		min_l = -1
-		v_pts = [v["x"], v["y"], v["r"], v["g"], v["b"]]
-		for u_idx in labeled:
-			u = graph.vs()[u_idx]
-			d = ((v_pts[0] - u["x"])**2 + (v_pts[1] - u["y"])**2 + (v_pts[2] - u["r"])**2 + (v_pts[3] - u["g"])**2 + (v_pts[4] - u["b"])**2)
-			if d < min_d:
-				min_d = d
-				min_l = u_idx
-		buff[v.index] = (min_l, min_d)
-
-		# atribui lista de k vizinhos mais proximos
-		dic_nn[v.index] = tree.query(np.array([v_pts]), k=(k+1))
-
-	sender.send((buff, dic_nn))
-
-
-def gbili(vertex_set, tree, k1, k2, buff, sender, dic_nn):
-
-	#print k2
-	l = []
-	for v in vertex_set:
-		if v.index % 10000 == 0:
-			print v.index
-
-		l_dists = []
-		l_ew = []
-		list_v_nn = dic_nn[v.index] # tree.query(np.array([[v["x"], v["y"], v["r"], v["g"], v["b"]]]), k=(k1+1));
-		# for each KNN vertex
-		for i, nn in enumerate(list_v_nn[1][0]):
-			if nn == v.index:
-				continue
-			u = graph.vs()[nn]
-			list_u_nn = dic_nn[nn] #tree.query(np.array([[u["x"], u["y"], u["r"], u["g"], u["b"]]]), k=(k1+1))
-			# if it is mutual
-			if v.index in list_u_nn[1][0]:
-				d1 = list_v_nn[0][0][i]
-				(lidx,d2) = buff[u.index] 		# near_labeled(v, pts, labeled, labeled_pts, buff)
-				l_dists.append(d1 + d2)
-				# tuple (edge, weight)
-				l_ew.append(((v.index, nn), 1/(1+d1)))
-
-		count = 0
-		for idx in np.argsort(l_dists):
-			if count < k2:
-				# put(edge, weight)  (l_ew[idx][0], l_ew[idx][1])
-				l.append(l_ew[idx])
-			else:
-				break
-			count+=1
-	#print 'sending %d' %len(l)
-	sender.send(l)
-
+	return data[attr_id][object_id]
 
 if __name__ == '__main__':
 
@@ -127,110 +135,91 @@ if __name__ == '__main__':
 	parser = OptionParser()
 	usage = "usage: python %prog [options] args ..."
 	description = """Graph Based on Informativeness of Labeled Instances"""
-	parser.add_option("-f", "--file", dest="filename", help="Input file", metavar="FILE")
-	parser.add_option("-1", "--knn", dest="k", help="knn")
-	parser.add_option("-2", "--semiknn", dest="semik", help="semiknn")
-	parser.add_option("-l", "--labels", dest="labels", help="Labels")
-	parser.add_option("-t", "--nthreads", dest="nthreads", help="Number of threads", default=4)
+	parser.add_option("-f", "--filename", dest="filename", help="Input file", metavar="FILE")
 	parser.add_option("-o", "--output", dest="output", help="Output file", metavar="FILE")
-	parser.add_option("-c", "--ncluster", dest="nclusters", help="Number of clusters")
+	parser.add_option("-l", "--labels", dest="labels", help="Labels")
+	parser.add_option("-1", "--k1", dest="k1", help="Knn", default=3)
+	parser.add_option("-2", "--k2", dest="k2", help="Semi-supervised k", default=3)
+	parser.add_option("-t", "--threads", dest="threads", help="Number of threads", default=4)
 
+	# Process options and args
 	(options, args) = parser.parse_args()
-	filename = options.filename
-	k = int(options.k)			# k1
-	k2 = int(options.semik)			# k2
-	labels_filename = options.labels	# vertices rotulados
-	output = options.output
-	n_threads = int(options.nthreads)
-	c = int(options.nclusters)		# numero de clusters
+	k1 = int(options.k1) # Knn
+	k2 = int(options.k2) # Semi-supervised K
+	threads = int(options.threads) # Number of threads
 
-	if filename is None:
+	if options.filename is None:
 		parser.error("required -f [filename] arg.")
-	if labels_filename is None:
+	if options.labels is None:
 		parser.error("required -l [labels] arg.")
 	if options.output is None:
 	 	filename, extension = os.path.splitext(os.path.basename(options.filename))
-	 	options.output = filename + '.edgelist'
+	 	options.output = 'output/' + filename + '.edgelist'
 
-	graph = igraph.Graph()
-	graph.to_undirected()
-	im = Image.open(filename)
-	pix = im.load()
-	x, y, r, g, b = [], [], [], [], []
+	# Reading the labeled set of vertex
+	f = open(options.labels, 'r')
+	labeled_set = [int(line.rstrip('\n')) for line in f]
 
-	# Labeled set
-	labeled, map_labels = read_labels(labels_filename)
+	# Reading data table
+	# Acess value by get_attr(data, object_id, attr_id)
+	# Acess all attributs of an object by get_attrs(data, object_id)
+	data = np.loadtxt(options.filename, unpack=True)
+	attr_count = data.shape[0] # Number of attributes
+	obj_count = data.shape[1] # Number of objects
+	obj_set = range(0, obj_count) # Set of objects
 
-	for j in range(0,im.size[1]):
-		for i in range(0,im.size[0]):
-			graph.add_vertex()
-			vertex = graph.vs[graph.vcount()-1]
-			vertex["name"] = vertex.index
-			vertex["x"] = i
-			vertex["y"] = j
-			vertex["r"] = pix[i,j][0]
-			vertex["g"] = pix[i,j][1]
-			vertex["b"] = pix[i,j][2]
-			x.append(i)
-			y.append(j)
-			r.append(pix[i,j][0])
-			g.append(pix[i,j][1])
-			b.append(pix[i,j][2])
+	# Create KD tree from data
+	kdtree = spatial.KDTree(data)
 
-	x = np.array(x)
-	y = np.array(y)
-	r = np.array(r)
-	g = np.array(g)
-	b = np.array(b)
-	tree = spatial.KDTree(zip(x.ravel(), y.ravel(), r.ravel(), g.ravel(), b.ravel()))
+	# Size of the set of vertices by threads, such that V = {V_1, ..., V_{threads} and part = |V_i|
+	part = len(graph.vs()) / threads
 
-	# atribui para os rotulados mais proximos
+	# # ******************************************
+	# lq = []
+	# l_threads = []
+	# for i in xrange(0, len(graph.vs()), part ):
+	# 	sender, receiver = Pipe()
+	# 	p = Process(target=labeled_nearest, args=(graph.vs()[i:i+part], graph, labeled_set, kdtree, sender))
+	# 	p.daemon = True
+	# 	p.start()
+	# 	lq.append(receiver)
+	# 	l_threads.append(p)
 
-	# divide em subconjuntos de vertices pelo numero de threads
-	# subconjunto de vertices (V = {V_1, ..., V_{n_threads})
-	part = len(graph.vs())/n_threads
+	# buff = dict()
+	# dic_nn = dict()
+	# for receiver in lq:
+	# 	(buff_p, dic_nn_p) = receiver.recv()
+	# 	buff.update(buff_p)
+	# 	dic_nn.update(dic_nn_p)
+	# # ******************************************
 
-	# ******************************************
-	lq = []
-	l_threads = []
-	for i in xrange(0, len(graph.vs()), part ):
-		sender, receiver = Pipe()
-		p = Process(target=labeled_nearest, args=(graph.vs()[i:i+part], graph, labeled, tree, sender))
-		p.daemon = True
-		p.start()
-		lq.append(receiver)
-		l_threads.append(p)
+	# lq = []
+	# l_threads = []
+	# for i in xrange(0, len(graph.vs()), part ):
+	# 	sender, receiver = Pipe()
+	# 	p = Process(target=gbili, args=(graph.vs()[i:i+part], kdtree, k, k2, buff, sender, dic_nn))
+	# 	p.daemon = True
+	# 	p.start()
+	# 	l_threads.append(p)
+	# 	lq.append(receiver)
 
-	buff = dict()
-	dic_nn = dict()
-	for receiver in lq:
-		(buff_p, dic_nn_p) = receiver.recv()
-		buff.update(buff_p)
-		dic_nn.update(dic_nn_p)
-	# ******************************************
+	# # Create set of weighted edges
+	# edges = []
+	# weights = []
+	# for receiver in lq:
+	# 	l_ew = receiver.recv()
+	# 	for edge, weight in l_ew:
+	# 		edges += [edge]
+	# 		weights.append(weight)
 
-	lq = []
-	l_threads = []
-	for i in xrange(0, len(graph.vs()), part ):
-		sender, receiver = Pipe()
-		p = Process(target=gbili, args=(graph.vs()[i:i+part], tree, k, k2, buff, sender, dic_nn))
-		p.daemon = True
-		p.start()
-		l_threads.append(p)
-		lq.append(receiver)
+	# # Create graph by igraph library
+	# graph = igraph.Graph()
 
-	edges = []
-	weights = []
-	for receiver in lq:
-		l_ew = receiver.recv()
-		for edge, weight in l_ew:
-			edges += [edge]
-			weights.append(weight)
+	# # Insert weighted edges to graph
+	# graph.add_edges(edges)
+	# graph.es["weight"] = weights
+	# graph.to_undirected()
+	# graph.simplify(combine_edges='first')
 
-	# Insert adges with weights to graph
-	graph.add_edges(edges)
-	graph.es["weight"] = weights
-	graph.simplify(combine_edges='first')
-
-	# Save gbili graph to edgelist format
-	graph.write(output, format='edgelist')
+	# # Save gbili graph to edgelist format
+	# graph.write(options.output, format='edgelist')
