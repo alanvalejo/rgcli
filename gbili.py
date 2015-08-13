@@ -1,6 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+GBILI (Graph Based on Informativeness of Labeled Instances)
+==========================
+
+Copyright (C) 2015 Thiago Faleiros <thiagodepaulo@gmail.com>,
+Alan Valejo <alanvalejo@gmail.com>, Lilian Berton <lilian.2as@gmail.com>
+All rights reserved
+
+To exploit the informativeness conveyed by these few labeled instances
+available in semi-supervised scenarios.
+"""
+
 import Image
 import math
 import igraph
@@ -16,9 +28,10 @@ from math import sqrt
 from Queue import Queue
 from multiprocessing import Process, Pipe
 
-# RLock is a reentrant lock. acquire() can be called multiple times by the
-# same thread without blocking.
-mylock = threading.RLock()
+__author__ = 'Thiago Faleiros, Alan Valejo, Lilian Berton'
+__license__ = 'GNU GENERAL PUBLIC LICENSE'
+__docformat__ = 'restructuredtext en'
+__version__ = '0.1'
 
 def read_labels(file):
 	""" Read file with labels
@@ -28,8 +41,7 @@ def read_labels(file):
 			dictionary: List of vertices <vertice, label>
 	"""
 
-	vertices = []
-	labels = dict()
+	vertices, labels = [], dict()
 	with open(file, 'r') as f:
 		for line in f:
 			line = line.split()
@@ -39,11 +51,17 @@ def read_labels(file):
 			labels[vertex] = label
 	return(vertices, labels)
 
+def labeled_nearest(vertex_set, graph, labeled, tree, sender):
+	""" atribui para os rotulados mais proximos
+		busca os vizinhos rotulados mais proximos
+		Attributes:
+			vertex_set ():
+			graph ():
+			labeled ():
+			tree ():
+			sender ():
+	"""
 
-
-# busca os vizinhos rotulados mais proximos
-def aux_calc(vertex_set, graph, labeled, tree, sender):
-	# atribui para os rotulados mais proximos
 	buff = dict()
 	dic_nn = dict()
 	for v in vertex_set:
@@ -182,7 +200,7 @@ if __name__ == '__main__':
 	l_threads = []
 	for i in xrange(0, len(graph.vs()), part ):
 		sender, receiver = Pipe()
-		p = Process(target=aux_calc, args=(graph.vs()[i:i+part], graph, labeled, tree, sender))
+		p = Process(target=labeled_nearest, args=(graph.vs()[i:i+part], graph, labeled, tree, sender))
 		p.daemon = True
 		p.start()
 		lq.append(receiver)
@@ -227,45 +245,5 @@ if __name__ == '__main__':
 	graph.add_edges(edges)
 	graph.es["weight"] = weights
 
-	# _plot_xy(graph)
-
 	graph.simplify(combine_edges='first')
-	# print 'escrevendo...'
-	# graph.write(out_filename, format='ncol')
-
-	#menbership = graph.community_leading_eigenvector(clusters=c,weights="weight")
-	#menbership = graph.community_infomap(edge_weights="weight")
-
-	fixed_l = [False]*len(graph.vs())
-	init_l = [random.choice(list(set(map_labels.values()))) for x in range(len(graph.vs()))]
-	for l in labeled:
-		init_l[l] = map_labels[l]
-		fixed_l[l] = True
-
-
-#	cl = graph.community_fastgreedy()
-#	membership = cl.as_clustering(2).membership
-
-	t0 = time.time()
-	menbership = graph.community_label_propagation(weights="weight", initial=init_l,fixed=fixed_l)
-	# write time
-	t1 = time.time()
-	with open('time_gbili','a') as f:
-		f.write('%f\t%f\t%f\tlpt\n' %(k, k2, (t1 - t0)))
-
-	ass = dict()
-	for cluster_id in xrange(len(menbership)):
-		for v in menbership[cluster_id]:
-			ass[v] = cluster_id
-
-	print 'escrevendo cluster to %s' %out_filename
-	with open(out_filename,'w') as f:
-		for v in xrange(len(ass)):
-			f.write(str(ass[v]+1)+'\n')
-
-#	f = open(out_filename, 'w')
-#	for edge in graph.es():
-#		v1,v2,weight = edge.tuple[0], edge.tuple[1], edge["weight"]
-#		f.write("%d\t%d\t%.3f\n"  %(v1, v2, weight))
-#	f.close()
-	print 'fim'
+	graph.write(out_filename, format='ncol')
