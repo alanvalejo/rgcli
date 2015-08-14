@@ -187,7 +187,6 @@ if __name__ == '__main__':
 
 
 	# \node[main_node] (1) at (0,0) {1};
-	
-	
+
 	
 
