@@ -11,18 +11,14 @@ All rights reserved
 
 To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
-
-Required python igraph library
-.. _igraph: http://igraph.sourceforge.net
 """
 
 import Image
 import math
-import igraph
-import numpy as np
 import threading
 import os
 import random
+import numpy as np
 
 from scipy import spatial
 from optparse import OptionParser
@@ -38,16 +34,19 @@ __version__ = '0.1'
 
 def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 	"""
-	...
+	Check the set of labeled nearest for all vertices
 	Attributes:
-	Returns:
+		obj_subset (array): Set of vertices by threads
+		data (np.array): Original data table
+		labeled_set (array): Set of lebeled vertices
+		kdtree (spatial.KDTree): KD tree accounting for from data
+		k1 (int): K nearest neighbors
+		sender (multiprocessing.Connection): Pipe connection objects
 	"""
 
 	buff = dict()
 	dic_knn = dict()
 	for obj in obj_subset:
-		if obj % 10000 == 0:
-			print obj
 		min_dist = float('inf')
 		min_label = -1
 		obj_attrs = data[obj]
@@ -57,26 +56,29 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 			if dist < min_dist:
 				min_dist = dist
 				min_label = obj_labeled
+		# Map [object_id] = <labeled_id, distance>
 		buff[obj] = (min_label, min_dist)
 
-		# atribui lista de k vizinhos mais proximos
 		# (dists, indexs) = kdtree.query(obj_attrs, k=(k+1))
 		dic_knn[obj] = kdtree.query(obj_attrs, k=(k1+1))
-		dic_knn[obj] = (dic_knn[obj][0][1:], dic_knn[obj][1][1:])	# considering the first nearst neighbor equal itself
+		# Considering the first nearst neighbor equal itself
+		dic_knn[obj] = (dic_knn[obj][0][1:], dic_knn[obj][1][1:])
 
 	sender.send((buff, dic_knn))
 
-def gbili(obj_subset, data, k1, k2, buff, dic_knn, sender):
+def gbili(obj_subset, k2, buff, dic_knn, sender):
 	"""
-	...
+	GBILI kernel
 	Attributes:
-	Returns:
+		obj_subset (array): Set of vertices by threads
+		k2 (int): Semi-supervised K
+		buff (dictinary): Each vertex is associated with the nearest neighbor labeled
+		dic_knn (dictionary): List of Knn to each vertice
+		sender (multiprocessing.Connection): Pipe connection objects
 	"""
 
-	ew = []	
+	ew = [] # Set of weighted edges
 	for obj in obj_subset:
-		if obj % 10000 == 0:
-			print obj
 		obj_dists = []
 		obj_ew = []
 		obj_knn = dic_knn[obj]
@@ -92,12 +94,9 @@ def gbili(obj_subset, data, k1, k2, buff, dic_knn, sender):
 				obj_dists.append(d1 + d2)
 				# Tuple (edge, weight)
 				obj_ew.append((obj, nn, 1/(1+d1)))
-				#print obj_ew
 
 		for idx in np.argsort(obj_dists)[:k2]:
 			ew.append(obj_ew[idx])
-
-	#print ew
 
 	sender.send(ew)
 
@@ -133,8 +132,8 @@ if __name__ == '__main__':
 	labeled_set = [int(line.rstrip('\n')) for line in f]
 
 	# Reading data table
-	# Acess value by get_attr(data, object_id, attr_id)
-	# Acess all attributs of an object by get_attrs(data, object_id)
+	# Acess value by data[object_id][attribute_id]
+	# Acess all attributs of an object by data[object_id]
 	data = np.loadtxt(options.filename, unpack=True).transpose()
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
@@ -146,9 +145,10 @@ if __name__ == '__main__':
 	# Size of the set of vertices by threads, such that V = {V_1, ..., V_{threads} and part = |V_i|
 	part = obj_count / threads
 
-	# creating list of labeled nearst neighours
+	# Creating list of labeled nearst neighours
 	receivers = []
 	for i in xrange(0, obj_count, part):
+		# Returns a pair (conn1, conn2) of Connection objects representing the ends of a pipe
 		sender, receiver = Pipe()
 		p = Process(target=labeled_nearest, args=(obj_set[i:i+part], data, labeled_set, kdtree, k1, sender))
 		p.daemon = True
@@ -158,45 +158,28 @@ if __name__ == '__main__':
 	buff = dict()
 	dic_knn = dict()
 	for receiver in receivers:
-		# waiting threads
+		# Waiting threads
 		(buff_aux, dic_knn_aux) = receiver.recv()
 		buff.update(buff_aux)
 		dic_knn.update(dic_knn_aux)
 
-	# starting GBILI processing
+	# Starting GBILI processing
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=gbili, args=(obj_set[i:i+part], data, k1, k2, buff, dic_knn, sender))
+		p = Process(target=gbili, args=(obj_set[i:i+part], k2, buff, dic_knn, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
 
 	# Create set of weighted edges
-	l = []
 	edgelist = ''
 	for receiver in receivers:
-		# waiting threads
+		# Waiting threads
 		ew = receiver.recv()
 		for edge in ew:
 			edgelist += '%s %s %s\n' % edge
-			l.append(edge)
-	
-	# save edgelist in output file
+
+	# Save edgelist in output file
 	with open(options.output,'w') as fout:
 		fout.write(edgelist)
-
-
-	# \node[main_node] (1) at (0,0) {1};
-	s1 = ''
-	for i in xrange(len(data)):
-		s1 += '\n\\node[main_node] (%s) at (%s,%s) {%s};' %(i, data[i][0], data[i][1], i)
-
-	s2 = '\n'.join( '\\draw ('+str(e[0])+') -- ('+str(e[1])+');' for e in l)+'\n'
-
-	with open('output/plot','w') as fout:
-		fout.write(s1+'\n'+s2)
-	
-	
-	
-
