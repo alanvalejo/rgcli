@@ -36,7 +36,7 @@ __license__ = 'GNU GENERAL PUBLIC LICENSE'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
 
-def labeled_nearest(obj_subset, data, labeled_set, kdtree, k, sender):
+def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 	"""
 	...
 	Attributes:
@@ -61,7 +61,8 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, k, sender):
 
 		# atribui lista de k vizinhos mais proximos
 		# (dists, indexs) = kdtree.query(obj_attrs, k=(k+1))
-		dic_knn[obj] = kdtree.query(obj_attrs, k=(k+1))
+		dic_knn[obj] = kdtree.query(obj_attrs, k=(k1+1))
+		dic_knn[obj] = (dic_knn[obj][0][1:], dic_knn[obj][1][1:])	# considering the first nearst neighbor equal itself
 
 	sender.send((buff, dic_knn))
 
@@ -80,20 +81,21 @@ def gbili(obj_subset, data, k1, k2, buff, dic_knn, sender):
 		obj_ew = []
 		obj_knn = dic_knn[obj]
 		# For each KNN vertex
-		for i, nn in enumerate(obj_knn[1][1:]):
+		for i, nn in enumerate(obj_knn[1]):
 			nn_knn = dic_knn[nn]
 			# If it is mutual
 			if obj in nn_knn[1]:
 				# Distance between obj and nn
-				d1 = obj_knn[0][i+1]
+				d1 = obj_knn[0][i]
 				# Labeled nearst neabord and distance between nn and labeled nerast neabord
 				(labeled, d2) = buff[nn]
 				obj_dists.append(d1 + d2)
 				# Tuple (edge, weight)
 				obj_ew.append((obj, nn, 1/(1+d1)))
 				#print obj_ew
-			
-		for idx in np.argsort(obj_dists)[:k2-1]:
+
+		print obj, len(obj_dists[:k2]), len(obj_dists)
+		for idx in np.argsort(obj_dists)[:k2]:
 			ew.append(obj_ew[idx])
 
 	#print ew
@@ -187,6 +189,15 @@ if __name__ == '__main__':
 
 
 	# \node[main_node] (1) at (0,0) {1};
+	s1 = ''
+	for i in xrange(len(data)):
+		s1 += '\n\\node[main_node] (%s) at (%s,%s) {%s};' %(i, data[i][0], data[i][1], i)
 
+	s2 = '\n'.join( '\\draw ('+str(e[0])+') -- ('+str(e[1])+');' for e in l)+'\n'
+
+	with open('output/plot','w') as fout:
+		fout.write(s1+'\n'+s2)
+	
+	
 	
 
