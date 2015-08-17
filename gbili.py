@@ -118,6 +118,8 @@ if __name__ == '__main__':
 		parser.error("required -l [labels] arg.")
 	if options.output is None:
 	 	filename, extension = os.path.splitext(os.path.basename(options.filename))
+		if not os.path.exists('output'):
+			os.makedirs('output')
 	 	options.output = 'output/' + filename + '-gbili.edgelist'
 
 	# Reading the labeled set of vertex
