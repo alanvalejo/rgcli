@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!square.dat
+!square.edgelist
+# etc...
+
+# ...even if they are in subdirectories
+# !*/

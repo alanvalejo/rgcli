@@ -7,25 +7,18 @@ GBILI (Graph Based on Informativeness of Labeled Instances)
 
 Copyright (C) 2015 Thiago Faleiros <thiagodepaulo@gmail.com>,
 Alan Valejo <alanvalejo@gmail.com>, Lilian Berton <lilian.2as@gmail.com>
-All rights reserved
+All rights reserved.
 
 To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
 """
 
-import Image
-import math
-import threading
 import os
-import random
 import numpy as np
 
 from scipy import spatial
 from optparse import OptionParser
-from math import sqrt
-from Queue import Queue
 from multiprocessing import Process, Pipe
-from scipy.spatial import distance
 
 __author__ = 'Thiago Faleiros, Alan Valejo, Lilian Berton'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
@@ -52,7 +45,7 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 		obj_attrs = data[obj]
 		for obj_labeled in labeled_set:
 			obj_labeled_attrs = data[obj_labeled]
-			dist = distance.euclidean(obj_attrs, obj_labeled_attrs)
+			dist = spatial.distance.euclidean(obj_attrs, obj_labeled_attrs)
 			if dist < min_dist:
 				min_dist = dist
 				min_label = obj_labeled
@@ -125,7 +118,7 @@ if __name__ == '__main__':
 		parser.error("required -l [labels] arg.")
 	if options.output is None:
 	 	filename, extension = os.path.splitext(os.path.basename(options.filename))
-	 	options.output = 'output/' + filename + '.edgelist'
+	 	options.output = 'output/' + filename + '-gbili.edgelist'
 
 	# Reading the labeled set of vertex
 	f = open(options.labels, 'r')
