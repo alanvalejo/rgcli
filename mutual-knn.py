@@ -25,9 +25,10 @@ __version__ = '0.1'
 
 def knn(obj_subset, data, kdtree, k, sender):
 	"""
-	Check the set of labeled nearest for all vertices
+	Knn
 	Attributes:
 		obj_subset (array): Set of vertices by threads
+		data (np.array): Original data table
 		kdtree (spatial.KDTree): KD tree accounting for from data
 		k (int): K nearest neighbors
 		sender (multiprocessing.Connection): Pipe connection objects
@@ -45,7 +46,7 @@ def knn(obj_subset, data, kdtree, k, sender):
 
 def mutual_knn(obj_subset, k, dic_knn, sender):
 	"""
-	GBILI kernel
+	Mutual Knn
 	Attributes:
 		obj_subset (array): Set of vertices by threads
 		k2 (int): Semi-supervised K
