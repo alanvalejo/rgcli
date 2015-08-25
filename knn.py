@@ -11,12 +11,13 @@ Alan Valejo <alanvalejo@gmail.com> All rights reserved.
 TODO
 """
 
-import os
 import numpy as np
+import os
 
-from scipy import spatial
+from multiprocessing import Pipe
+from multiprocessing import Process
 from optparse import OptionParser
-from multiprocessing import Process, Pipe
+from scipy import spatial
 
 __author__ = 'Thiago Faleiros, Alan Valejo'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
@@ -37,11 +38,12 @@ def knn(obj_subset, data, kdtree, k, sender):
 	ew = [] # Set of weighted edges
 	for obj in obj_subset:
 		obj_attrs = data[obj]
-		obj_knn = kdtree.query(obj_attrs, k=(k+1));
+		obj_knn = kdtree.query(obj_attrs, k=(k + 1))
 		# For each KNN vertex
 		for i, nn in enumerate(obj_knn[1]):
+			if obj == nn: continue
 			d1 = obj_knn[0][i]
-			ew.append((obj, nn, 1/(1+d1)))
+			ew.append((obj, nn, 1 / (1 + d1)))
 
 	sender.send(ew)
 
@@ -53,7 +55,7 @@ if __name__ == '__main__':
 	description = """Knn Graph Construction"""
 	parser.add_option("-f", "--filename", dest="filename", help="Input file", metavar="FILE")
 	parser.add_option("-o", "--output", dest="output", help="Output file", metavar="FILE")
-	parser.add_option("-1", "--k", dest="k", help="Knn", default=3)
+	parser.add_option("-k", "--k", dest="k", help="Knn", default=3)
 	parser.add_option("-t", "--threads", dest="threads", help="Number of threads", default=4)
 
 	# Process options and args
@@ -65,12 +67,15 @@ if __name__ == '__main__':
 		parser.error("required -f [filename] arg.")
 	if options.output is None:
 	 	filename, extension = os.path.splitext(os.path.basename(options.filename))
-	 	options.output = 'output/' + filename + '-knn.edgelist'
+		if not os.path.exists('output'):
+			os.makedirs('output')
+	 	options.output = 'output/' + filename + '-knn' + str(options.k) + '.edgelist'
 
 	# Reading data table
 	# Acess value by data[object_id][attribute_id]
 	# Acess all attributs of an object by data[object_id]
-	data = np.loadtxt(options.filename, unpack=True).transpose()
+	# To transpose set arg unpack=True
+	data = np.loadtxt(options.filename)
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
 	obj_set = range(0, obj_count) # Set of objects
@@ -85,7 +90,7 @@ if __name__ == '__main__':
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=knn, args=(obj_set[i:i+part], data, kdtree, k, sender))
+		p = Process(target=knn, args=(obj_set[i:i + part], data, kdtree, k, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)

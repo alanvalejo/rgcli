@@ -13,12 +13,13 @@ To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
 """
 
-import os
 import numpy as np
+import os
 
-from scipy import spatial
+from multiprocessing import Pipe
+from multiprocessing import Process
 from optparse import OptionParser
-from multiprocessing import Process, Pipe
+from scipy import spatial
 
 __author__ = 'Thiago Faleiros, Alan Valejo, Lilian Berton'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
@@ -53,7 +54,7 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 		buff[obj] = (min_label, min_dist)
 
 		# (dists, indexs) = kdtree.query(obj_attrs, k=(k+1))
-		dic_knn[obj] = kdtree.query(obj_attrs, k=(k1+1))
+		dic_knn[obj] = kdtree.query(obj_attrs, k=(k1 + 1))
 		# Considering the first nearst neighbor equal itself
 		dic_knn[obj] = (dic_knn[obj][0][1:], dic_knn[obj][1][1:])
 
@@ -77,6 +78,7 @@ def gbili(obj_subset, k2, buff, dic_knn, sender):
 		obj_knn = dic_knn[obj]
 		# For each KNN vertex
 		for i, nn in enumerate(obj_knn[1]):
+			if obj == nn: continue
 			nn_knn = dic_knn[nn]
 			# If it is mutual
 			if obj in nn_knn[1]:
@@ -86,7 +88,7 @@ def gbili(obj_subset, k2, buff, dic_knn, sender):
 				(labeled, d2) = buff[nn]
 				obj_dists.append(d1 + d2)
 				# Tuple (edge, weight)
-				obj_ew.append((obj, nn, 1/(1+d1)))
+				obj_ew.append((obj, nn, 1 / (1 + d1)))
 
 		for idx in np.argsort(obj_dists)[:k2]:
 			ew.append(obj_ew[idx])
@@ -129,7 +131,8 @@ if __name__ == '__main__':
 	# Reading data table
 	# Acess value by data[object_id][attribute_id]
 	# Acess all attributs of an object by data[object_id]
-	data = np.loadtxt(options.filename, unpack=True).transpose()
+	# To transpose set arg unpack=True
+	data = np.loadtxt(options.filename)
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
 	obj_set = range(0, obj_count) # Set of objects
@@ -145,7 +148,7 @@ if __name__ == '__main__':
 	for i in xrange(0, obj_count, part):
 		# Returns a pair (conn1, conn2) of Connection objects representing the ends of a pipe
 		sender, receiver = Pipe()
-		p = Process(target=labeled_nearest, args=(obj_set[i:i+part], data, labeled_set, kdtree, k1, sender))
+		p = Process(target=labeled_nearest, args=(obj_set[i:i + part], data, labeled_set, kdtree, k1, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
@@ -162,7 +165,7 @@ if __name__ == '__main__':
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=gbili, args=(obj_set[i:i+part], k2, buff, dic_knn, sender))
+		p = Process(target=gbili, args=(obj_set[i:i + part], k2, buff, dic_knn, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)

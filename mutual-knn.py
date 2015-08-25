@@ -11,12 +11,13 @@ Alan Valejo <alanvalejo@gmail.com> All rights reserved.
 TODO
 """
 
-import os
 import numpy as np
+import os
 
-from scipy import spatial
+from multiprocessing import Pipe
+from multiprocessing import Process
 from optparse import OptionParser
-from multiprocessing import Process, Pipe
+from scipy import spatial
 
 __author__ = 'Thiago Faleiros, Alan Valejo'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
@@ -38,7 +39,7 @@ def knn(obj_subset, data, kdtree, k, sender):
 	for obj in obj_subset:
 		obj_attrs = data[obj]
 		# (dists, indexs) = kdtree.query(obj_attrs, k=(k+1))
-		dic_knn[obj] = kdtree.query(obj_attrs, k=(k+1))
+		dic_knn[obj] = kdtree.query(obj_attrs, k=(k + 1))
 		# Considering the first nearst neighbor equal itself
 		dic_knn[obj] = (dic_knn[obj][0][1:], dic_knn[obj][1][1:])
 
@@ -60,13 +61,14 @@ def mutual_knn(obj_subset, k, dic_knn, sender):
 		obj_knn = dic_knn[obj]
 		# For each KNN vertex
 		for i, nn in enumerate(obj_knn[1]):
+			if obj == nn: continue
 			nn_knn = dic_knn[nn]
 			# If it is mutual
 			if obj in nn_knn[1]:
 				# Distance between obj and nn
 				d1 = obj_knn[0][i]
 				# Tuple (edge, weight)
-				ew.append((obj, nn, 1/(1+d1)))
+				ew.append((obj, nn, 1 / (1 + d1)))
 
 	sender.send(ew)
 
@@ -78,7 +80,7 @@ if __name__ == '__main__':
 	description = """Graph Based on Informativeness of Labeled Instances"""
 	parser.add_option("-f", "--filename", dest="filename", help="Input file", metavar="FILE")
 	parser.add_option("-o", "--output", dest="output", help="Output file", metavar="FILE")
-	parser.add_option("-1", "--k", dest="k", help="Knn", default=3)
+	parser.add_option("-k", "--k", dest="k", help="Knn", default=3)
 	parser.add_option("-t", "--threads", dest="threads", help="Number of threads", default=4)
 
 	# Process options and args
@@ -90,12 +92,15 @@ if __name__ == '__main__':
 		parser.error("required -f [filename] arg.")
 	if options.output is None:
 	 	filename, extension = os.path.splitext(os.path.basename(options.filename))
-	 	options.output = 'output/' + filename + '-mutual.edgelist'
+		if not os.path.exists('output'):
+			os.makedirs('output')
+	 	options.output = 'output/' + filename + '-mutual' + str(options.k) + '.edgelist'
 
 	# Reading data table
 	# Acess value by data[object_id][attribute_id]
 	# Acess all attributs of an object by data[object_id]
-	data = np.loadtxt(options.filename, unpack=True).transpose()
+	# To transpose set arg unpack=True
+	data = np.loadtxt(options.filename)
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
 	obj_set = range(0, obj_count) # Set of objects
@@ -126,7 +131,7 @@ if __name__ == '__main__':
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=mutual_knn, args=(obj_set[i:i+part], k, dic_knn, sender))
+		p = Process(target=mutual_knn, args=(obj_set[i:i + part], k, dic_knn, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
