@@ -11,12 +11,14 @@ Alan Valejo <alanvalejo@gmail.com> All rights reserved.
 TODO
 """
 
-import os
 import numpy as np
+import os
+import sys
 
-from scipy import spatial
+from multiprocessing import Pipe
+from multiprocessing import Process
 from optparse import OptionParser
-from multiprocessing import Process, Pipe
+from scipy import spatial
 
 __author__ = 'Thiago Faleiros, Alan Valejo'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
@@ -37,15 +39,16 @@ def knn(obj_subset, data, kdtree, k, sender):
 	ew = [] # Set of weighted edges
 	for obj in obj_subset:
 		obj_attrs = data[obj]
-		obj_knn = kdtree.query(obj_attrs, k=(k+1));
+		obj_knn = kdtree.query(obj_attrs, k=(k + 1));
 		# For each KNN vertex
 		for i, nn in enumerate(obj_knn[1]):
 			d1 = obj_knn[0][i]
-			ew.append((obj, nn, 1/(1+d1)))
+			ew.append((obj, nn, 1 / (1 + d1)))
 
 	sender.send(ew)
 
-if __name__ == '__main__':
+def main():
+	"""Main entry point for the application when run from the command line"""
 
 	# Parse options command line
 	parser = OptionParser()
@@ -101,3 +104,6 @@ if __name__ == '__main__':
 	# Save edgelist in output file
 	with open(options.output,'w') as fout:
 		fout.write(edgelist)
+
+if __name__ == "__main__":
+    sys.exit(main())

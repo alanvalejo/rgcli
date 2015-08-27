@@ -11,12 +11,14 @@ Alan Valejo <alanvalejo@gmail.com> All rights reserved.
 TODO
 """
 
-import os
 import numpy as np
+import os
+import sys
 
-from scipy import spatial
+from multiprocessing import Pipe
+from multiprocessing import Process
 from optparse import OptionParser
-from multiprocessing import Process, Pipe
+from scipy import spatial
 
 __author__ = 'Thiago Faleiros, Alan Valejo'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
@@ -66,11 +68,12 @@ def mutual_knn(obj_subset, k, dic_knn, sender):
 				# Distance between obj and nn
 				d1 = obj_knn[0][i]
 				# Tuple (edge, weight)
-				ew.append((obj, nn, 1/(1+d1)))
+				ew.append((obj, nn, 1 / (1 + d1)))
 
 	sender.send(ew)
 
-if __name__ == '__main__':
+def main():
+	"""Main entry point for the application when run from the command line"""
 
 	# Parse options command line
 	parser = OptionParser()
@@ -122,7 +125,7 @@ if __name__ == '__main__':
 		dic_knn_aux = receiver.recv()
 		dic_knn.update(dic_knn_aux)
 
-	# Starting GBILI processing
+	# Starting mutual knn processing
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
@@ -142,3 +145,6 @@ if __name__ == '__main__':
 	# Save edgelist in output file
 	with open(options.output,'w') as fout:
 		fout.write(edgelist)
+
+if __name__ == "__main__":
+    sys.exit(main())

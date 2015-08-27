@@ -13,12 +13,14 @@ To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
 """
 
-import os
 import numpy as np
+import os
+import sys
 
-from scipy import spatial
+from multiprocessing import Pipe
+from multiprocessing import Process
 from optparse import OptionParser
-from multiprocessing import Process, Pipe
+from scipy import spatial
 
 __author__ = 'Thiago Faleiros, Alan Valejo, Lilian Berton'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
@@ -53,7 +55,7 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 		buff[obj] = (min_label, min_dist)
 
 		# (dists, indexs) = kdtree.query(obj_attrs, k=(k+1))
-		dic_knn[obj] = kdtree.query(obj_attrs, k=(k1+1))
+		dic_knn[obj] = kdtree.query(obj_attrs, k=(k1 + 1))
 		# Considering the first nearst neighbor equal itself
 		dic_knn[obj] = (dic_knn[obj][0][1:], dic_knn[obj][1][1:])
 
@@ -86,14 +88,15 @@ def gbili(obj_subset, k2, buff, dic_knn, sender):
 				(labeled, d2) = buff[nn]
 				obj_dists.append(d1 + d2)
 				# Tuple (edge, weight)
-				obj_ew.append((obj, nn, 1/(1+d1)))
+				obj_ew.append((obj, nn, 1 / (1 + d1)))
 
 		for idx in np.argsort(obj_dists)[:k2]:
 			ew.append(obj_ew[idx])
 
 	sender.send(ew)
 
-if __name__ == '__main__':
+def main():
+	"""Main entry point for the application when run from the command line"""
 
 	# Parse options command line
 	parser = OptionParser()
@@ -145,7 +148,7 @@ if __name__ == '__main__':
 	for i in xrange(0, obj_count, part):
 		# Returns a pair (conn1, conn2) of Connection objects representing the ends of a pipe
 		sender, receiver = Pipe()
-		p = Process(target=labeled_nearest, args=(obj_set[i:i+part], data, labeled_set, kdtree, k1, sender))
+		p = Process(target=labeled_nearest, args=(obj_set[i:i + part], data, labeled_set, kdtree, k1, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
@@ -162,7 +165,7 @@ if __name__ == '__main__':
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=gbili, args=(obj_set[i:i+part], k2, buff, dic_knn, sender))
+		p = Process(target=gbili, args=(obj_set[i:i + part], k2, buff, dic_knn, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
@@ -178,3 +181,6 @@ if __name__ == '__main__':
 	# Save edgelist in output file
 	with open(options.output,'w') as fout:
 		fout.write(edgelist)
+
+if __name__ == "__main__":
+    sys.exit(main())
