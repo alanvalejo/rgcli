@@ -15,7 +15,10 @@ available in semi-supervised scenarios.
 
 import numpy as np
 import os
+<<<<<<< HEAD
 import sys
+=======
+>>>>>>> 56a60cbde59f506592225c0bd2c772573f09ef5b
 
 from multiprocessing import Pipe
 from multiprocessing import Process
@@ -79,6 +82,7 @@ def gbili(obj_subset, k2, buff, dic_knn, sender):
 		obj_knn = dic_knn[obj]
 		# For each KNN vertex
 		for i, nn in enumerate(obj_knn[1]):
+			if obj == nn: continue
 			nn_knn = dic_knn[nn]
 			# If it is mutual
 			if obj in nn_knn[1]:
@@ -132,7 +136,8 @@ def main():
 	# Reading data table
 	# Acess value by data[object_id][attribute_id]
 	# Acess all attributs of an object by data[object_id]
-	data = np.loadtxt(options.filename, unpack=True).transpose()
+	# To transpose set arg unpack=True
+	data = np.loadtxt(options.filename)
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
 	obj_set = range(0, obj_count) # Set of objects
@@ -181,6 +186,9 @@ def main():
 	# Save edgelist in output file
 	with open(options.output,'w') as fout:
 		fout.write(edgelist)
+<<<<<<< HEAD
 
 if __name__ == "__main__":
     sys.exit(main())
+=======
+>>>>>>> 56a60cbde59f506592225c0bd2c772573f09ef5b
