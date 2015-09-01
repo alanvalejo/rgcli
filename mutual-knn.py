@@ -13,10 +13,7 @@ TODO
 
 import numpy as np
 import os
-<<<<<<< HEAD
 import sys
-=======
->>>>>>> 56a60cbde59f506592225c0bd2c772573f09ef5b
 
 from multiprocessing import Pipe
 from multiprocessing import Process
@@ -150,11 +147,8 @@ def main():
 			edgelist += '%s %s %s\n' % edge
 
 	# Save edgelist in output file
-	with open(options.output,'w') as fout:
-		fout.write(edgelist)
-<<<<<<< HEAD
+	with open(options.output,'w') as f:
+		f.write(edgelist)
 
 if __name__ == "__main__":
     sys.exit(main())
-=======
->>>>>>> 56a60cbde59f506592225c0bd2c772573f09ef5b

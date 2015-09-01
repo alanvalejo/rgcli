@@ -181,8 +181,8 @@ def main():
 			edgelist += '%s %s %s\n' % edge
 
 	# Save edgelist in output file
-	with open(options.output,'w') as fout:
-		fout.write(edgelist)
+	with open(options.output,'w') as f:
+		f.write(edgelist)
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -13,10 +13,7 @@ TODO
 
 import numpy as np
 import os
-<<<<<<< HEAD
 import sys
-=======
->>>>>>> 56a60cbde59f506592225c0bd2c772573f09ef5b
 
 from multiprocessing import Pipe
 from multiprocessing import Process
@@ -42,11 +39,7 @@ def knn(obj_subset, data, kdtree, k, sender):
 	ew = [] # Set of weighted edges
 	for obj in obj_subset:
 		obj_attrs = data[obj]
-<<<<<<< HEAD
-		obj_knn = kdtree.query(obj_attrs, k=(k + 1));
-=======
 		obj_knn = kdtree.query(obj_attrs, k=(k + 1))
->>>>>>> 56a60cbde59f506592225c0bd2c772573f09ef5b
 		# For each KNN vertex
 		for i, nn in enumerate(obj_knn[1]):
 			if obj == nn: continue
@@ -113,11 +106,8 @@ def main():
 			edgelist += '%s %s %s\n' % edge
 
 	# Save edgelist in output file
-	with open(options.output,'w') as fout:
-		fout.write(edgelist)
-<<<<<<< HEAD
+	with open(options.output,'w') as f:
+		f.write(edgelist)
 
 if __name__ == "__main__":
     sys.exit(main())
-=======
->>>>>>> 56a60cbde59f506592225c0bd2c772573f09ef5b
