@@ -145,7 +145,6 @@ def main():
 	# Acess all attributs of an object by data[object_id]
 	# To transpose set arg unpack=True
 	data = np.loadtxt(options.filename, delimiter=dialect.delimiter, usecols=range(0, ncols))
-	print data
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
 	obj_set = range(0, obj_count) # Set of objects
