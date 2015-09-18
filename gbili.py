@@ -16,6 +16,7 @@ available in semi-supervised scenarios.
 import numpy as np
 import os
 import sys
+import csv
 
 from multiprocessing import Pipe
 from multiprocessing import Process
@@ -101,14 +102,15 @@ def main():
 
 	# Parse options command line
 	parser = OptionParser()
-	usage = "usage: python %prog [options] args ..."
-	description = """Graph Based on Informativeness of Labeled Instances"""
-	parser.add_option("-f", "--filename", dest="filename", help="Input file", metavar="FILE")
-	parser.add_option("-o", "--output", dest="output", help="Output file", metavar="FILE")
-	parser.add_option("-l", "--labels", dest="labels", help="Labels")
-	parser.add_option("-1", "--k1", dest="k1", help="Knn", default=3)
-	parser.add_option("-2", "--k2", dest="k2", help="Semi-supervised k", default=3)
-	parser.add_option("-t", "--threads", dest="threads", help="Number of threads", default=4)
+	usage = 'usage: python %prog [options] args ...'
+	description = 'Graph Based on Informativeness of Labeled Instances'
+	parser.add_option('-f', '--filename', dest='filename', help='Input file', metavar='FILE')
+	parser.add_option('-o', '--output', dest='output', help='Output file', metavar='FILE')
+	parser.add_option('-l', '--labels', dest='labels', help='Labels')
+	parser.add_option('-1', '--k1', dest='k1', help='Knn', default=3)
+	parser.add_option('-2', '--k2', dest='k2', help='Semi-supervised k', default=3)
+	parser.add_option('-t', '--threads', dest='threads', help='Number of threads', default=4)
+	parser.add_option("-c", '--skiplastcolumn', action='store_false', dest='skip_last_column', default=True)
 
 	# Process options and args
 	(options, args) = parser.parse_args()
@@ -117,24 +119,32 @@ def main():
 	threads = int(options.threads) # Number of threads
 
 	if options.filename is None:
-		parser.error("required -f [filename] arg.")
+		parser.error('required -f [filename] arg.')
 	if options.labels is None:
-		parser.error("required -l [labels] arg.")
+		parser.error('required -l [labels] arg.')
+	else:
+		# Reading the labeled set of vertex
+		f = open(options.labels, 'r')
+		labeled_set = [int(line.rstrip('\n')) for line in f]
 	if options.output is None:
-	 	filename, extension = os.path.splitext(os.path.basename(options.filename))
+		filename, extension = os.path.splitext(os.path.basename(options.filename))
 		if not os.path.exists('output'):
 			os.makedirs('output')
-	 	options.output = 'output/' + filename + '-gbili.edgelist'
+		options.output = 'output/' + filename + '-gbili.ncol'
 
-	# Reading the labeled set of vertex
-	f = open(options.labels, 'r')
-	labeled_set = [int(line.rstrip('\n')) for line in f]
+	# Detect wich delimiter and is used in the data
+	with open(options.filename, 'r') as f:
+		first_line = f.readline()
+		ncols = len(first_line.split(','))
+		if not options.skip_last_column: ncols -= 1
+	sniffer = csv.Sniffer()
+	dialect = sniffer.sniff(first_line)
 
 	# Reading data table
 	# Acess value by data[object_id][attribute_id]
 	# Acess all attributs of an object by data[object_id]
 	# To transpose set arg unpack=True
-	data = np.loadtxt(options.filename)
+	data = np.loadtxt(options.filename, delimiter=dialect.delimiter, usecols=range(0, ncols))
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
 	obj_set = range(0, obj_count) # Set of objects
