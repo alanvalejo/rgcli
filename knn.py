@@ -73,13 +73,13 @@ def main():
 			os.makedirs('output')
 		options.output = 'output/' + filename + '-knn' + str(options.k) + '.ncol'
 
-	# Detect wich delimiter and is used in the data
+	# Detect wich delimiter and which columns to use is used in the data
 	with open(options.filename, 'r') as f:
 		first_line = f.readline()
-		ncols = len(first_line.split(','))
-		if not options.skip_last_column: ncols -= 1
 	sniffer = csv.Sniffer()
 	dialect = sniffer.sniff(first_line)
+	ncols = len(first_line.split(dialect.delimiter))
+	if not options.skip_last_column: ncols -= 1
 
 	# Reading data table
 	# Acess value by data[object_id][attribute_id]

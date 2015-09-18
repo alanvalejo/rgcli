@@ -28,7 +28,7 @@ __license__ = 'GNU GENERAL PUBLIC LICENSE'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
 
-def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
+def labeled_nearest(obj_subset, data, labeled_set, kdtree, ke, sender):
 	"""
 	Check the set of labeled nearest for all vertices
 	Attributes:
@@ -36,7 +36,7 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 		data (np.array): Original data table
 		labeled_set (array): Set of lebeled vertices
 		kdtree (spatial.KDTree): KD tree accounting for from data
-		k1 (int): K nearest neighbors
+		ke (int): K nearest neighbors
 		sender (multiprocessing.Connection): Pipe connection objects
 	"""
 
@@ -56,18 +56,18 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, k1, sender):
 		buff[obj] = (min_label, min_dist)
 
 		# (dists, indexs) = kdtree.query(obj_attrs, k=(k+1))
-		dic_knn[obj] = kdtree.query(obj_attrs, k=(k1 + 1))
+		dic_knn[obj] = kdtree.query(obj_attrs, k=(ke + 1))
 		# Considering the first nearst neighbor equal itself
 		dic_knn[obj] = (dic_knn[obj][0][1:], dic_knn[obj][1][1:])
 
 	sender.send((buff, dic_knn))
 
-def gbili(obj_subset, k2, buff, dic_knn, sender):
+def gbili(obj_subset, ki, buff, dic_knn, sender):
 	"""
 	GBILI kernel
 	Attributes:
 		obj_subset (array): Set of vertices by threads
-		k2 (int): Semi-supervised K
+		ki (int): Semi-supervised K
 		buff (dictinary): Each vertex is associated with the nearest neighbor labeled
 		dic_knn (dictionary): List of Knn to each vertice
 		sender (multiprocessing.Connection): Pipe connection objects
@@ -92,7 +92,7 @@ def gbili(obj_subset, k2, buff, dic_knn, sender):
 				# Tuple (edge, weight)
 				obj_ew.append((obj, nn, 1 / (1 + d1)))
 
-		for idx in np.argsort(obj_dists)[:k2]:
+		for idx in np.argsort(obj_dists)[:ki]:
 			ew.append(obj_ew[idx])
 
 	sender.send(ew)
@@ -106,25 +106,25 @@ def main():
 	description = 'Graph Based on Informativeness of Labeled Instances'
 	parser.add_option('-f', '--filename', dest='filename', help='Input file', metavar='FILE')
 	parser.add_option('-o', '--output', dest='output', help='Output file', metavar='FILE')
-	parser.add_option('-l', '--labels', dest='labels', help='Labels')
-	parser.add_option('-1', '--k1', dest='k1', help='Knn', default=3)
-	parser.add_option('-2', '--k2', dest='k2', help='Semi-supervised k', default=3)
+	parser.add_option('-l', '--label', dest='label', help='Labels')
+	parser.add_option('-1', '--ke', dest='ke', help='Knn', default=3)
+	parser.add_option('-2', '--ki', dest='ki', help='Semi-supervised k', default=3)
 	parser.add_option('-t', '--threads', dest='threads', help='Number of threads', default=4)
-	parser.add_option("-c", '--skiplastcolumn', action='store_false', dest='skip_last_column', default=True)
+	parser.add_option("-c", '--skip_last_column', action='store_false', dest='skip_last_column', default=True)
 
 	# Process options and args
 	(options, args) = parser.parse_args()
-	k1 = int(options.k1) # Knn
-	k2 = int(options.k2) # Semi-supervised K
+	ke = int(options.ke) # Knn
+	ki = int(options.ki) # Semi-supervised K
 	threads = int(options.threads) # Number of threads
 
 	if options.filename is None:
 		parser.error('required -f [filename] arg.')
-	if options.labels is None:
-		parser.error('required -l [labels] arg.')
+	if options.label is None:
+		parser.error('required -l [label] arg.')
 	else:
 		# Reading the labeled set of vertex
-		f = open(options.labels, 'r')
+		f = open(options.label, 'r')
 		labeled_set = [int(line.rstrip('\n')) for line in f]
 	if options.output is None:
 		filename, extension = os.path.splitext(os.path.basename(options.filename))
@@ -132,19 +132,20 @@ def main():
 			os.makedirs('output')
 		options.output = 'output/' + filename + '-gbili.ncol'
 
-	# Detect wich delimiter and is used in the data
+	# Detect wich delimiter and which columns to use is used in the data
 	with open(options.filename, 'r') as f:
 		first_line = f.readline()
-		ncols = len(first_line.split(','))
-		if not options.skip_last_column: ncols -= 1
 	sniffer = csv.Sniffer()
 	dialect = sniffer.sniff(first_line)
+	ncols = len(first_line.split(dialect.delimiter))
+	if not options.skip_last_column: ncols -= 1
 
 	# Reading data table
 	# Acess value by data[object_id][attribute_id]
 	# Acess all attributs of an object by data[object_id]
 	# To transpose set arg unpack=True
 	data = np.loadtxt(options.filename, delimiter=dialect.delimiter, usecols=range(0, ncols))
+	print data
 	attr_count = data.shape[1] # Number of attributes
 	obj_count = data.shape[0] # Number of objects
 	obj_set = range(0, obj_count) # Set of objects
@@ -160,7 +161,7 @@ def main():
 	for i in xrange(0, obj_count, part):
 		# Returns a pair (conn1, conn2) of Connection objects representing the ends of a pipe
 		sender, receiver = Pipe()
-		p = Process(target=labeled_nearest, args=(obj_set[i:i + part], data, labeled_set, kdtree, k1, sender))
+		p = Process(target=labeled_nearest, args=(obj_set[i:i + part], data, labeled_set, kdtree, ke, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
@@ -177,7 +178,7 @@ def main():
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=gbili, args=(obj_set[i:i + part], k2, buff, dic_knn, sender))
+		p = Process(target=gbili, args=(obj_set[i:i + part], ki, buff, dic_knn, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
