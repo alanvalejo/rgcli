@@ -1,7 +1,7 @@
 # GBILI
 **About**
 
-This is an alternative Python implementation of graph construction method GBILI (graph based on the informativeness of labeled instances), published by Berton and Lopes (2014) [1](1). The implementation is based on Kd-tree and Multithreading and is faster than the original described in the paper, specially for large data sets. 
+This is an alternative Python implementation of graph construction method GBILI (graph based on the informativeness of labeled instances), published by [Berton and Lopes (2014)] ([1]). The implementation is based on Kd-tree and Multithreading and is faster than the original described in the paper, specially for large data sets. 
 
 **Usage**
 
