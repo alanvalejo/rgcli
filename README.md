@@ -14,7 +14,7 @@ This is an alternative Python implementation of graph construction method GBILI 
 *Parameters*: 
 * -f (dataset as input file)
 * -o (output file default .ncol list)
-* -l (list of labels points used to construct GBILI graph)
+* -l (list of labels points used to construct GBILI graph in the format edgelist with a blank line)
 * -1 (ke for KNN default 20)
 * -2 (ki for GBILI default 2)
 * -t (number of  threads default 4)
