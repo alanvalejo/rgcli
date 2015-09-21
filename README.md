@@ -5,25 +5,14 @@ This is an alternative Python implementation of graph construction method GBILI 
 
 **Usage**
 
-Declare an array of datasets
-`datasets=(dataset1 dataset2 dataset3)`
-
-Now loop through the above datasets
-`for dataset in "${datasets[@]}"
-do
-	echo ${dataset}
-	gbili=()`
-	
 Execute GBILI
-	`START=$(date +%s.%N)
-	python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels --k1=2 --k2=20
-	END=$(date +%s.%N)
-	DIFF=$(echo "$END - $START" | bc)
-	gbili[${itr}]=$DIFF`
+	`python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels --ki=2 --ke=20`
 
 Obs:
 The implementation supports any numerical dataset as input and the output is a weighted undirected graph.
+
 Results are written to a list of connections, one connection per line.
+
 Parameters k1 and k2 need to be set with integer values. In general k1 < k2. 
 
 **References**
