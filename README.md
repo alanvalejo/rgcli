@@ -8,12 +8,11 @@ This is an alternative Python implementation of graph construction method GBILI 
 Execute GBILI
 	`python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels --ki=2 --ke=20`
 
-Obs:
-The implementation supports any numerical dataset as input and the output is a weighted undirected graph.
+Input: any numerical dataset with any delimiter for attributes 
 
-Results are written to a list of connections, one connection per line.
+Output: a weighted undirected graph in the format: filename + '-gbili.ncol'
 
-Parameters k1 and k2 need to be set with integer values. In general k1 < k2. 
+Parameters: dataset as input file, output file (default .ncol list), list of labels points used to construct GBILI graph, ke for KNN (default 20), ki for GBILI (default 2), number of  threads (default 4), skip the last column (-c). 
 
 **References**
 
