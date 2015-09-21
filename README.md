@@ -23,11 +23,11 @@ This is an alternative Python implementation of graph construction method GBILI 
 **References**
 
 @inproceedings{Berton_Lopes_2014,
- * title = {Graph construction based on labeled instances for Semi-Supervised Learning}, 
- * author = {Lilian Berton and Alneu de Andrade Lopes}, 
- * booktitle = {22nd International Conference on Pattern Recognition}, 
- * keywords = {graph construction; semi-supervised learning; classification; complex network}, 
- * doi = {10.1109/ICPR.2014.428},
- * year = {2014},
- * pages = {2477-2482},
+ title = {Graph construction based on labeled instances for Semi-Supervised Learning},   
+ author = {Lilian Berton and Alneu de Andrade Lopes},   
+ booktitle = {22nd International Conference on Pattern Recognition},   
+ keywords = {graph construction; semi-supervised learning; classification; complex network},    
+ doi = {10.1109/ICPR.2014.428},   
+ year = {2014},   
+ pages = {2477-2482},   
 }
