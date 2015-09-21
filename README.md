@@ -5,7 +5,7 @@ This is an alternative Python implementation of graph construction method GBILI 
 
 **Usage**
 
-*GBILI execution*:  `python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels -1 2 -2 20`
+*GBILI execution*:  `python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels -1 20 -2 2`
 
 *Input*: any numerical dataset with any delimiter for attributes 
 
