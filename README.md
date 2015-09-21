@@ -5,16 +5,16 @@ This is an alternative Python implementation of graph construction method GBILI 
 
 **Usage**
 
-# Declare an array of datasets
+Declare an array of datasets
 'datasets=(dataset1 dataset2 dataset3)'
 
-# Now loop through the above datasets
+Now loop through the above datasets
 'for dataset in "${datasets[@]}"
 do
 	echo ${dataset}
 	gbili=()'
 	
-# Execute GBILI
+Execute GBILI
 	'START=$(date +%s.%N)
 	python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels --k1=2 --k2=20
 	END=$(date +%s.%N)
@@ -26,6 +26,7 @@ The implementation supports any numerical dataset as input and the output is a w
 Results are written to a list of connections, one connection per line.
 
 **References**
+
 [1] @inproceedings{Berton_Lopes_2014,
   title = {Graph construction based on labeled instances for Semi-Supervised Learning},
   author = {Lilian Berton and Alneu de Andrade Lopes},
