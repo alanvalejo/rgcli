@@ -5,14 +5,14 @@ This is an alternative Python implementation of graph construction method GBILI 
 
 **Usage**
 
-Execute GBILI
-	`python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels --ki=2 --ke=20`
+Execute GBILI:
+	`python gbili.py -f input/${dataset}.dat -l input/${dataset}.labels -1 2 -2 20`
 
 *Input*: any numerical dataset with any delimiter for attributes 
 
 *Output*: a weighted undirected graph in the format: filename + '-gbili.ncol'
 
-*Parameters*: dataset as input file, output file (default .ncol list), list of labels points used to construct GBILI graph, ke for KNN (default 20), ki for GBILI (default 2), number of  threads (default 4), skip the last column (-c). 
+*Parameters*: -f (dataset as input file), -o (output file default .ncol list), -l (list of labels points used to construct GBILI graph), -1 (ke for KNN default 20), -2 (ki for GBILI default 2), -t (number of  threads default 4), -c (skip the last column). 
 
 **References**
 
