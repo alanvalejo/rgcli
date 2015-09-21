@@ -22,7 +22,7 @@ This is an alternative Python implementation of graph construction method GBILI 
 
 **References**
 
-@inproceedings{Berton_Lopes_2014,
+@inproceedings{Berton_Lopes_2014,   
  title = {Graph construction based on labeled instances for Semi-Supervised Learning},   
  author = {Lilian Berton and Alneu de Andrade Lopes},   
  booktitle = {22nd International Conference on Pattern Recognition},   
