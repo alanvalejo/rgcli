@@ -12,13 +12,13 @@ This is an alternative Python implementation of graph construction method GBILI 
 *Output*: a weighted undirected graph in the format: filename + '-gbili.ncol'
 
 *Parameters*: 
-1. -f (dataset as input file)
-2. -o (output file default .ncol list)
-3. -l (list of labels points used to construct GBILI graph)
-4. -1 (ke for KNN default 20)
-5. -2 (ki for GBILI default 2)
-6. -t (number of  threads default 4)
-7. -c (skip the last column). 
+* -f (dataset as input file)
+* -o (output file default .ncol list)
+* -l (list of labels points used to construct GBILI graph)
+* -1 (ke for KNN default 20)
+* -2 (ki for GBILI default 2)
+* -t (number of  threads default 4)
+* -c (skip the last column). 
 
 **References**
 
