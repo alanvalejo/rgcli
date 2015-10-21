@@ -14,7 +14,10 @@ TODO
 import numpy as np
 import os
 import sys
+import csv
 
+from helper import write_ncol
+from helper import write_pajek
 from multiprocessing import Pipe
 from multiprocessing import Process
 from optparse import OptionParser
@@ -59,6 +62,8 @@ def main():
 	parser.add_option('-o', '--output', dest='output', help='Output file', metavar='FILE')
 	parser.add_option('-k', '--k', dest='k', help='Knn', default=3)
 	parser.add_option('-t', '--threads', dest='threads', help='Number of threads', default=4)
+	parser.add_option('-e', '--format', dest='format', help='Format file', default='ncol')
+	parser.add_option("-c", '--skip_last_column', action='store_false', dest='skip_last_column', default=True)
 
 	# Process options and args
 	(options, args) = parser.parse_args()
@@ -67,11 +72,13 @@ def main():
 
 	if options.filename is None:
 		parser.error('required -f [filename] arg.')
+	if options.format not in ['ncol', 'pajek']:
+		parser.error('supported formats: ncol and pajek.')
 	if options.output is None:
 		filename, extension = os.path.splitext(os.path.basename(options.filename))
 		if not os.path.exists('output'):
 			os.makedirs('output')
-		options.output = 'output/' + filename + '-knn' + str(options.k) + '.ncol'
+		options.output = 'output/' + filename + '-knn' + str(options.k) + '.' +  options.format
 
 	# Detect wich delimiter and which columns to use is used in the data
 	with open(options.filename, 'r') as f:
@@ -114,8 +121,10 @@ def main():
 			edgelist += '%s %s %s\n' % edge
 
 	# Save edgelist in output file
-	with open(options.output,'w') as f:
-		f.write(edgelist)
+	if options.format == 'ncol':
+		write_ncol(options.output, edgelist)
+	else:
+		write_pajek(options.output, obj_count, edgelist)
 
 if __name__ == "__main__":
     sys.exit(main())
