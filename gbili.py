@@ -13,17 +13,16 @@ To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
 """
 
-import numpy as np
+import csv
 import os
 import sys
-import csv
-
-from helper import write_ncol
-from helper import write_pajek
-from multiprocessing import Pipe
-from multiprocessing import Process
+from multiprocessing import Pipe, Process
 from optparse import OptionParser
+
+import numpy as np
 from scipy import spatial
+
+from helper import write_ncol, write_pajek
 
 __author__ = 'Thiago Faleiros, Alan Valejo, Lilian Berton'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
