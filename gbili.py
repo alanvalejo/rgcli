@@ -5,9 +5,8 @@
 GBILI (Graph Based on Informativeness of Labeled Instances)
 ==========================
 
-Copyright (C) 2015 Thiago Faleiros <thiagodepaulo@gmail.com>,
-Alan Valejo <alanvalejo@gmail.com>, Lilian Berton <lilian.2as@gmail.com>
-All rights reserved.
+:Author: Thiago Faleiros <thiagodepaulo@gmail.com>, Alan Valejo <alanvalejo@gmail.com>,
+Lilian Berton <lilian.2as@gmail.com>
 
 To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.

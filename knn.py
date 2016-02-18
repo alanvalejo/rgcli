@@ -5,8 +5,7 @@
 Knn (TODO)
 ==========================
 
-Copyright (C) 2015 Thiago Faleiros <thiagodepaulo@gmail.com>,
-Alan Valejo <alanvalejo@gmail.com> All rights reserved.
+:Author: Thiago Faleiros <thiagodepaulo@gmail.com>, Alan Valejo <alanvalejo@gmail.com>
 
 TODO
 """
