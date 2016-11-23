@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Knn (TODO)
+Knn
+TODO: description
 ==========================
 
 :Author: Thiago Faleiros <thiagodepaulo@gmail.com>, Alan Valejo <alanvalejo@gmail.com>
 
-TODO
+TODO: description
 """
 
 import numpy as np

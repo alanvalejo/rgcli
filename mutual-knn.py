@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Mutual Knn (TODO)
+Mutual Knn
+TODO: description
 ==========================
 
 :Author: Thiago Faleiros <thiagodepaulo@gmail.com>, Alan Valejo <alanvalejo@gmail.com>
 
-TODO
+TODO: desciption
 """
 
 import numpy as np
