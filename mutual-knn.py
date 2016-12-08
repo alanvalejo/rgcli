@@ -105,7 +105,7 @@ def main():
 		filename, extension = os.path.splitext(os.path.basename(options.filename))
 		if not os.path.exists('output'):
 			os.makedirs('output')
-		options.output = 'output/' + filename + '-mutual' + str(options.k) + '.' +  options.format
+		options.output = 'output/' + filename + '-mutual' + str(options.k) + '.' + options.format
 
 	# Detect wich delimiter and which columns to use is used in the data
 	with open(options.filename, 'r') as f:
@@ -170,4 +170,4 @@ def main():
 		write_pajek(options.output, obj_count, edgelist)
 
 if __name__ == "__main__":
-    sys.exit(main())
+	sys.exit(main())

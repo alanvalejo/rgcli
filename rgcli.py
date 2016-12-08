@@ -202,4 +202,4 @@ def main():
 		write_pajek(options.output, obj_count, edgelist)
 
 if __name__ == "__main__":
-    sys.exit(main())
+	sys.exit(main())
