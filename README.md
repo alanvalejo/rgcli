@@ -22,7 +22,7 @@ This is an alternative Python implementation of graph construction method RGCLI 
 * -1 (ke for KNN default 20)
 * -2 (ki for RGCLI default 2)
 * -t (number of  threads default 4)
-* -c (skip the last column).
+* -c (skip the last column)
 
 **References**
 
