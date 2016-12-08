@@ -2,7 +2,7 @@
 
 **About**
 
-This is an alternative Python implementation of graph construction method RGCLI (graph based on the informativeness of labeled instances), published by Berton and Lopes (2014) [1]. The implementation is based on Kd-tree and Multi-threading and is faster than the original described in the paper, specially for large data sets.
+This is an alternative Python implementation of graph construction method RGCLI (Robust Graph that Considers Labeled Instances), published by Berton and Lopes (2016) [1]. The implementation is based on Kd-tree and Multi-threading and is faster than the original described in the paper, specially for large data sets.
 
 **Usage**
 
@@ -33,6 +33,6 @@ This is an alternative Python implementation of graph construction method RGCLI 
     author={Lilian Berton and Thiago de Paulo Faleiros and Alan Valejo and Jorge Valverde-Rebaza and Alneu de Andrade Lopes},
     title={RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning},
 	journal={Neurocomputing},
-    year={2016},
+    year={2016}
 }
 ~~~~~

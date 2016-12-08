@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 """
-GBILI (Graph Based on Informativeness of Labeled Instances)
+RGCLI (Robust Graph that Considers Labeled Instances)
 ==========================
 
-:Author: Thiago Faleiros <thiagodepaulo@gmail.com>, Alan Valejo <alanvalejo@gmail.com>,
+:Author: Alan Valejo <alanvalejo@gmail.com>, Thiago Faleiros <thiagodepaulo@gmail.com>,
 Lilian Berton <lilian.2as@gmail.com>
 
 To exploit the informativeness conveyed by these few labeled instances
@@ -23,10 +23,12 @@ from scipy import spatial
 
 from helper import write_ncol, write_pajek
 
-__author__ = 'Thiago Faleiros, Alan Valejo, Lilian Berton'
+__author__ = 'Alan Valejo, Thiago Faleiros, Lilian Berton'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
+__date__ = '2016-12-01'
+__author_email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com', 'lilian.2as@gmail.com'
 
 def labeled_nearest(obj_subset, data, labeled_set, kdtree, ke, sender):
 	"""

@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Knn
-TODO: description
+kNN
+K nearest neighbor graph construction
 ==========================
 
-:Author: Thiago Faleiros <thiagodepaulo@gmail.com>, Alan Valejo <alanvalejo@gmail.com>
+:Author: Alan Valejo <alanvalejo@gmail.com>, Thiago Faleiros <thiagodepaulo@gmail.com>
 
-TODO: description
+The nearest neighbor or, in general, the k nearest neighbor (kNN) graph of a data set is obtained by connecting each instance in the data set
+to its k closest instances from the data set, where a distance metric defines closeness.
 """
 
 import numpy as np
@@ -23,14 +24,16 @@ from multiprocessing import Process
 from optparse import OptionParser
 from scipy import spatial
 
-__author__ = 'Thiago Faleiros, Alan Valejo'
+__author__ = 'Alan Valejo, Thiago Faleiros'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
+__date__ = '2016-12-01'
+__author_email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com'
 
 def knn(obj_subset, data, kdtree, k, sender):
 	"""
-	Knn
+	kNN
 	Attributes:
 		obj_subset (array): Set of vertices by threads
 		data (np.array): Original data table
@@ -57,17 +60,17 @@ def main():
 	# Parse options command line
 	parser = OptionParser()
 	usage = 'usage: python %prog [options] args ...'
-	description = 'Knn Graph Construction'
+	description = 'kNN Graph Construction'
 	parser.add_option('-f', '--filename', dest='filename', help='Input file', metavar='FILE')
 	parser.add_option('-o', '--output', dest='output', help='Output file', metavar='FILE')
-	parser.add_option('-k', '--k', dest='k', help='Knn', default=3)
+	parser.add_option('-k', '--k', dest='k', help='kNN', default=3)
 	parser.add_option('-t', '--threads', dest='threads', help='Number of threads', default=4)
 	parser.add_option('-e', '--format', dest='format', help='Format file', default='ncol')
 	parser.add_option("-c", '--skip_last_column', action='store_false', dest='skip_last_column', default=True)
 
 	# Process options and args
 	(options, args) = parser.parse_args()
-	k = int(options.k) # Knn
+	k = int(options.k) # kNN
 	threads = int(options.threads) # Number of threads
 
 	if options.filename is None:

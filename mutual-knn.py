@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Mutual Knn
-TODO: description
+Mutual kNN
+Mutual k nearest neighbor graph construction
 ==========================
 
-:Author: Thiago Faleiros <thiagodepaulo@gmail.com>, Alan Valejo <alanvalejo@gmail.com>
+:Author: Alan Valejo <alanvalejo@gmail.com>, Thiago Faleiros <thiagodepaulo@gmail.com>
 
-TODO: desciption
+For the graph sparsification, k-Nearest Neighbors (kNN) is a method usually applied. Each vertex is associated with a set of k closest vertices (Nk) according to a similarity criterion. A variation of this method is mutual kNN graphs (MkNN), in which there is a connection between two vertices only if the rule of the neighborhood has been fulfilled by both vertices.
 """
 
 import numpy as np
@@ -23,10 +23,12 @@ from multiprocessing import Process
 from optparse import OptionParser
 from scipy import spatial
 
-__author__ = 'Thiago Faleiros, Alan Valejo'
+__author__ = 'Alan Valejo, Thiago Faleiros'
 __license__ = 'GNU GENERAL PUBLIC LICENSE'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
+__date__ = '2016-12-01'
+__author_email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com'
 
 def knn(obj_subset, data, kdtree, k, sender):
 	"""
