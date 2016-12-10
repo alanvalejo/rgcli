@@ -24,16 +24,18 @@ from optparse import OptionParser
 from scipy import spatial
 
 __author__ = 'Alan Valejo, Thiago Faleiros'
-__license__ = 'GNU GENERAL PUBLIC LICENSE'
+__email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com'
+__maintainer__ = 'Alan Valejo'
+__credits__ = ['Alan Valejo, Thiago Faleiros']
+__license__ = 'GNU'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
 __date__ = '2016-12-01'
-__author_email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com'
 
 def knn(obj_subset, data, kdtree, k, sender):
-	"""
-	Knn
-	Attributes:
+	"""  K nearest neighbor graph construction.
+
+	Args:
 		obj_subset (array): Set of vertices by threads
 		data (np.array): Original data table
 		kdtree (spatial.KDTree): KD tree accounting for from data
@@ -52,9 +54,9 @@ def knn(obj_subset, data, kdtree, k, sender):
 	sender.send(dic_knn)
 
 def mutual_knn(obj_subset, k, dic_knn, sender):
-	"""
-	Mutual Knn
-	Attributes:
+	""" Mutual k nearest neighbor graph construction.
+
+	Args:
 		obj_subset (array): Set of vertices by threads
 		k2 (int): Semi-supervised K
 		buff (dictinary): Each vertex is associated with the nearest neighbor labeled
@@ -79,7 +81,7 @@ def mutual_knn(obj_subset, k, dic_knn, sender):
 	sender.send(ew)
 
 def main():
-	"""Main entry point for the application when run from the command line"""
+	""" Main entry point for the application when run from the command line. """
 
 	# Parse options command line
 	parser = OptionParser()

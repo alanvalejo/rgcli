@@ -26,16 +26,18 @@ from scipy import spatial
 from helper import write_ncol, write_pajek
 
 __author__ = 'Alan Valejo, Thiago Faleiros, Lilian Berton'
-__license__ = 'GNU GENERAL PUBLIC LICENSE'
+__email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com', 'lilian.2as@gmail.com'
+__maintainer__ = 'Alan Valejo'
+__credits__ = ['Alan Valejo, Thiago Faleiros, Lilian Berton', 'Jorge Valverde-Rebaza', 'Alneu de Andrade Lopes']
+__license__ = 'GNU'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
 __date__ = '2016-12-01'
-__author_email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com', 'lilian.2as@gmail.com'
 
 def labeled_nearest(obj_subset, data, labeled_set, kdtree, ke, sender):
-	"""
-	Check the set of labeled nearest for all vertices
-	Attributes:
+	"""	Check the set of labeled nearest for all vertices.
+
+	Args:
 		obj_subset (array): Set of vertices by threads
 		data (np.array): Original data table
 		labeled_set (array): Set of lebeled vertices
@@ -67,9 +69,9 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, ke, sender):
 	sender.send((buff, dic_knn))
 
 def gbili(obj_subset, ki, buff, dic_knn, sender):
-	"""
-	GBILI kernel
-	Attributes:
+	""" GBILI kernel
+
+	Args:
 		obj_subset (array): Set of vertices by threads
 		ki (int): Semi-supervised K
 		buff (dictinary): Each vertex is associated with the nearest neighbor labeled
@@ -102,7 +104,7 @@ def gbili(obj_subset, ki, buff, dic_knn, sender):
 	sender.send(ew)
 
 def main():
-	"""Main entry point for the application when run from the command line"""
+	""" Main entry point for the application when run from the command line. """
 
 	# Parse options command line
 	parser = OptionParser()
