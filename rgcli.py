@@ -10,6 +10,8 @@ Lilian Berton <lilian.2as@gmail.com>
 
 To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
+
+Permission to copy and modify is granted under the foo license.
 """
 
 import csv
