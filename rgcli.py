@@ -5,8 +5,6 @@
 RGCLI (Robust Graph that Considers Labeled Instances)
 =====================================================
 
-:Author: Alan Valejo <alanvalejo@gmail.com>, Thiago Faleiros <thiagodepaulo@gmail.com>
-
 To exploit the informativeness conveyed by these few labeled instances
 available in semi-supervised scenarios.
 
@@ -24,9 +22,9 @@ from scipy import spatial
 
 from helper import write_ncol, write_pajek
 
+__maintainer__ = 'Alan Valejo'
 __author__ = 'Alan Valejo, Thiago Faleiros'
 __email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com'
-__maintainer__ = 'Alan Valejo'
 __credits__ = ['Alan Valejo', 'Thiago Faleiros', 'Lilian Berton', 'Jorge Valverde-Rebaza', 'Alneu de Andrade Lopes']
 __license__ = 'GNU'
 __docformat__ = 'restructuredtext en'
