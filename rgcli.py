@@ -3,7 +3,7 @@
 
 """
 RGCLI (Robust Graph that Considers Labeled Instances)
-==========================
+=====================================================
 
 :Author: Alan Valejo <alanvalejo@gmail.com>, Thiago Faleiros <thiagodepaulo@gmail.com>,
 Lilian Berton <lilian.2as@gmail.com>
