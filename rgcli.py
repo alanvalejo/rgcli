@@ -28,7 +28,7 @@ from helper import write_ncol, write_pajek
 __author__ = 'Alan Valejo, Thiago Faleiros, Lilian Berton'
 __email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com', 'lilian.2as@gmail.com'
 __maintainer__ = 'Alan Valejo'
-__credits__ = ['Alan Valejo, Thiago Faleiros, Lilian Berton', 'Jorge Valverde-Rebaza', 'Alneu de Andrade Lopes']
+__credits__ = ['Alan Valejo', 'Thiago Faleiros', 'Lilian Berton', 'Jorge Valverde-Rebaza', 'Alneu de Andrade Lopes']
 __license__ = 'GNU'
 __docformat__ = 'restructuredtext en'
 __version__ = '0.1'
