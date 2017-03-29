@@ -35,7 +35,7 @@ This is an alternative Python implementation of graph construction method RGCLI 
 @article{Berton_2016,
     author={Lilian Berton and Thiago de Paulo Faleiros and Alan Valejo and Jorge Valverde-Rebaza and Alneu de Andrade Lopes},
     title={RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning},
-	journal={Neurocomputing},
+    journal={Neurocomputing},
     year={2016}
 }
 ~~~~~

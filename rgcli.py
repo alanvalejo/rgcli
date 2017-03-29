@@ -42,8 +42,9 @@ __maintainer__ = 'Alan Valejo'
 __author__ = 'Alan Valejo, Thiago Faleiros'
 __email__ = 'alanvalejo@gmail.com', 'thiagodepaulo@gmail.com'
 __credits__ = ['Alan Valejo', 'Thiago Faleiros', 'Lilian Berton', 'Jorge Valverde-Rebaza', 'Alneu de Andrade Lopes']
+__homepage__ = 'https://github.com/alanvalejo/rgcli'
 __license__ = 'GNU'
-__docformat__ = 'restructuredtext en'
+__docformat__ = 'markdown en'
 __version__ = '0.1'
 __date__ = '2016-12-01'
 
