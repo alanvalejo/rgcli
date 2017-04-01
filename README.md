@@ -40,4 +40,4 @@ This is an alternative Python implementation of graph construction method RGCLI 
 }
 ~~~~~
 
-<div class="footer"> __&copy; Copyright (C) 2016 Alan Valejo &lt;alanvalejo@gmail.com&gt; All rights reserved.__</div>
+<div class="footer"> &copy; Copyright (C) 2016 Alan Valejo &lt;alanvalejo@gmail.com&gt; All rights reserved.</div>
