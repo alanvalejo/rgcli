@@ -19,7 +19,7 @@ This is an alternative Python implementation of graph construction method RGCLI 
 | Option					| Domain					| Description															|
 |:------------------------- |:------------------------- |:--------------------------------------------------------------------- |
 | -f, --filename			| string [FILE]				| Dataset as input file													|
-| -o, --output				| string [FILE]				| Output file default .ncol list										|
+| -o, --output				| string [FILE]				| Output file (default .ncol)											|
 | -l, --label				| string [FILE]				| List of labels points used to construct RGCLI 						|
 | -1, --ke					| [1,n] Integer interval	| ke for KNN															|
 | -2, --ki					| [1,n] Integer interval	| ki for RGCLI															|
@@ -39,3 +39,5 @@ This is an alternative Python implementation of graph construction method RGCLI 
     year={2016}
 }
 ~~~~~
+
+<div class="footer"> __&copy; Copyright (C) 2016 Alan Valejo &lt;alanvalejo@gmail.com&gt; All rights reserved.__</div>
