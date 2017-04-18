@@ -125,7 +125,8 @@ def main():
 	usage = 'usage: python %prog [options] args ...'
 	description = 'Graph Based on Informativeness of Labeled Instances'
 	parser.add_option('-f', '--filename', dest='filename', help='Input file', metavar='FILE')
-	parser.add_option('-o', '--output', dest='output', help='Output file', metavar='FILE')
+	parser.add_option('-d', '--directory', action='store', type=str, dest=None, help='[Output directory]')
+	parser.add_option('-o', '--output', action='store', dest=None, type=str, help='[Output filename]')
 	parser.add_option('-l', '--label', dest='label', help='List of labels points used to construct RGCLI')
 	parser.add_option('-1', '--ke', dest='ke', help='Knn', default=20)
 	parser.add_option('-2', '--ki', dest='ki', help='Semi-supervised k', default=2)
@@ -149,11 +150,16 @@ def main():
 		# Reading the labeled set of vertex
 		f = open(options.label, 'r')
 		labeled_set = [int(line.rstrip('\n')) for line in f]
+	if options.directory is None:
+		options.directory = os.path.dirname(os.path.abspath(options.filename)) + '/'
+	else:
+		if not os.path.exists(options.directory): os.makedirs(options.directory)
+	if not options.directory.endswith('/'): options.directory += '/'
 	if options.output is None:
 		filename, extension = os.path.splitext(os.path.basename(options.filename))
-		if not os.path.exists('output'):
-			os.makedirs('output')
-		options.output = 'output/' + filename + '-gbili.' + options.format
+		options.output = options.directory + filename + '-rgcli' + str(options.k) + '.' + options.format
+	else:
+		options.output = options.directory + options.output + '.' + options.format
 
 	# Detect wich delimiter and which columns to use is used in the data
 	with open(options.filename, 'r') as f:
