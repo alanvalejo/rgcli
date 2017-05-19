@@ -30,12 +30,11 @@ along with RGCLI. If not, see <http://www.gnu.org/licenses/>.
 import csv
 import os
 import sys
-from multiprocessing import Pipe, Process
 import argparse
-
 import numpy as np
-from scipy import spatial
 
+from scipy import spatial
+from multiprocessing import Pipe, Process
 from helper import write_ncol, write_pajek
 
 __maintainer__ = 'Alan Valejo'
@@ -156,7 +155,7 @@ def main():
 	if not options.directory.endswith('/'): options.directory += '/'
 	if options.output is None:
 		filename, extension = os.path.splitext(os.path.basename(options.filename))
-		options.output = options.directory + filename + '.' + options.format
+		options.output = options.directory + filename + '-rgcli' + '_' + str(options.ki) + '_' + str(options.ke) + '.' + options.format
 	else:
 		options.output = options.directory + options.output
 

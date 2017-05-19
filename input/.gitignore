@@ -5,6 +5,7 @@
 !.gitignore
 !square.dat
 !square.edgelist
+!square.label
 # etc...
 
 # ...even if they are in subdirectories
