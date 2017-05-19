@@ -31,7 +31,7 @@ import csv
 import os
 import sys
 from multiprocessing import Pipe, Process
-from optparse import OptionParser
+import argparse
 
 import numpy as np
 from scipy import spatial
@@ -121,25 +121,24 @@ def main():
 	""" Main entry point for the application when run from the command line. """
 
 	# Parse options command line
-	parser = OptionParser()
-	usage = 'usage: python %prog [options] args ...'
-	description = 'Graph Based on Informativeness of Labeled Instances'
-	parser.add_option('-f', '--filename', dest='filename', help='Input file', metavar='FILE')
-	parser.add_option('-d', '--directory', action='store', type=str, dest=None, help='[Output directory]')
-	parser.add_option('-o', '--output', action='store', dest=None, type=str, help='[Output filename]')
-	parser.add_option('-l', '--label', dest='label', help='List of labels points used to construct RGCLI')
-	parser.add_option('-1', '--ke', dest='ke', help='Knn', default=20)
-	parser.add_option('-2', '--ki', dest='ki', help='Semi-supervised k', default=2)
-	parser.add_option('-t', '--threads', dest='threads', help='Number of threads', default=4)
-	parser.add_option('-e', '--format', dest='format', help='Format output file', default='ncol')
-	parser.add_option("-c", '--skip_last_column', action='store_false', dest='skip_last_column', default=True, help='Skip last column')
+	usage = 'use "%(prog)s --help" for more information'
+	description = 'graph Based on Informativeness of Labeled Instances'
+	parser = argparse.ArgumentParser(description=description, usage=usage, formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=30, width=100))
+	optional = parser._action_groups.pop()
+	required = parser.add_argument_group('required arguments')
+	required.add_argument('-f', '--filename', dest='filename', action='store', type=str, metavar='FILE', default=None, help='name of the %(metavar)s to be loaded')
+	optional.add_argument('-d', '--directory', dest='directory', action='store', type=str, metavar='DIR', default=None, help='directory of FILE if it is not current directory')
+	optional.add_argument('-o', '--output', dest='output', action='store', type=str, metavar='FILE', default=None, help='name of the %(metavar)s to be save')
+	required.add_argument('-l', '--label', dest='label', action='store', type=str, metavar='FILE', default=None, help='list of labels points used to construct RGCLI')
+	optional.add_argument('-1', '--ke', dest='ke', action='store', type=int, metavar='int', default=20, help='kNN (default: %(default)s)')
+	optional.add_argument('-2', '--ki', dest='ki', action='store', type=int, metavar='int', default=2, help='semi-supervised k (default: %(default)s)')
+	optional.add_argument('-t', '--threads', dest='threads', action='store', type=int, metavar='int', default=4, help='number of threads (default: %(default)s)')
+	optional.add_argument('-e', '--format', dest='format', action='store', choices=['ncol', 'pajek'], type=str, metavar='str', default='ncol', help='format output file. Allowed values are ' + ', '.join(['ncol', 'pajek']) + ' (default: %(default)s)')
+	optional.add_argument('-c', '--skip_last_column', dest='skip_last_column', action='store_false', default=True, help='skip last column (default: true)')
+	parser._action_groups.append(optional)
+	options = parser.parse_args()
 
 	# Process options and args
-	(options, args) = parser.parse_args()
-	ke = int(options.ke) # Knn
-	ki = int(options.ki) # Semi-supervised K
-	threads = int(options.threads) # Number of threads
-
 	if options.filename is None:
 		parser.error('required -f [filename] arg.')
 	if options.format not in ['ncol', 'pajek']:
@@ -151,15 +150,15 @@ def main():
 		f = open(options.label, 'r')
 		labeled_set = [int(line.rstrip('\n')) for line in f]
 	if options.directory is None:
-		options.directory = os.path.dirname(os.path.abspath(options.filename)) + '/'
+		options.directory = os.path.dirname(os.path.abspath(options.filename))
 	else:
 		if not os.path.exists(options.directory): os.makedirs(options.directory)
 	if not options.directory.endswith('/'): options.directory += '/'
 	if options.output is None:
 		filename, extension = os.path.splitext(os.path.basename(options.filename))
-		options.output = options.directory + filename + '-rgcli' + str(options.k) + '.' + options.format
+		options.output = options.directory + filename + '.' + options.format
 	else:
-		options.output = options.directory + options.output + '.' + options.format
+		options.output = options.directory + options.output
 
 	# Detect wich delimiter and which columns to use is used in the data
 	with open(options.filename, 'r') as f:
@@ -182,14 +181,14 @@ def main():
 	kdtree = spatial.KDTree(data)
 
 	# Size of the set of vertices by threads, such that V = {V_1, ..., V_{threads} and part = |V_i|
-	part = obj_count / threads
+	part = obj_count / options.threads
 
 	# Creating list of labeled nearst neighours
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		# Returns a pair (conn1, conn2) of Connection objects representing the ends of a pipe
 		sender, receiver = Pipe()
-		p = Process(target=labeled_nearest, args=(obj_set[i:i + part], data, labeled_set, kdtree, ke, sender))
+		p = Process(target=labeled_nearest, args=(obj_set[i:i + part], data, labeled_set, kdtree, options.ke, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
@@ -206,7 +205,7 @@ def main():
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=gbili, args=(obj_set[i:i + part], ki, buff, dic_knn, sender))
+		p = Process(target=gbili, args=(obj_set[i:i + part], options.ki, buff, dic_knn, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
