@@ -133,7 +133,7 @@ def main():
 	optional.add_argument('-2', '--ki', dest='ki', action='store', type=int, metavar='int', default=2, help='semi-supervised k (default: %(default)s)')
 	optional.add_argument('-t', '--threads', dest='threads', action='store', type=int, metavar='int', default=4, help='number of threads (default: %(default)s)')
 	optional.add_argument('-e', '--format', dest='format', action='store', choices=['ncol', 'pajek'], type=str, metavar='str', default='ncol', help='format output file. Allowed values are ' + ', '.join(['ncol', 'pajek']) + ' (default: %(default)s)')
-	optional.add_argument('-c', '--skip_last_column', dest='skip_last_column', action='store_false', default=True, help='skip last column (default: true)')
+	optional.add_argument('-c', '--skip_last_column', dest='skip_last_column', action='store_false', default=True, help='skip last column (default: %(default)s)')
 	parser._action_groups.append(optional)
 	options = parser.parse_args()
 
