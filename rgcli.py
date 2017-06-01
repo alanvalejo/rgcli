@@ -81,8 +81,8 @@ def labeled_nearest(obj_subset, data, labeled_set, kdtree, ke, sender):
 
 	sender.send((buff, dic_knn))
 
-def gbili(obj_subset, ki, buff, dic_knn, sender):
-	""" GBILI kernel
+def rgcli(obj_subset, ki, buff, dic_knn, sender):
+	""" RGCLI kernel
 
 	Args:
 		obj_subset (array): Set of vertices by threads
@@ -200,11 +200,11 @@ def main():
 		buff.update(buff_aux)
 		dic_knn.update(dic_knn_aux)
 
-	# Starting GBILI processing
+	# Starting RGCLI processing
 	receivers = []
 	for i in xrange(0, obj_count, part):
 		sender, receiver = Pipe()
-		p = Process(target=gbili, args=(obj_set[i:i + part], options.ki, buff, dic_knn, sender))
+		p = Process(target=rgcli, args=(obj_set[i:i + part], options.ki, buff, dic_knn, sender))
 		p.daemon = True
 		p.start()
 		receivers.append(receiver)
