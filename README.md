@@ -27,6 +27,21 @@ This is an alternative Python implementation of graph construction method RGCLI 
 | -e, --format				| ['ncol', 'pajek']			| Format output file													|
 | -c, --skip_last_column	| [0,n] Integer interval	| Skip the last column													|
 
+**Dependencies**
+
+* Python: tested with version 2.7.13.
+* Packages needed: numpy, scipy and multiprocessing.
+
+**Known Bugs**
+
+Please contact the author for problems and bug report.
+
+**Contact**
+
+* Alan Valejo.
+* Ph.D. candidate at University of São Paolo (USP), Brazil.
+* alanvalejo@gmail.com.
+
 **References**
 
 > [1] Berton, Lilian; Faleiros, T.; Valejo, A.; Valverde-Rebaza, J.; and Lopes, A. A.: RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing, (2016)
