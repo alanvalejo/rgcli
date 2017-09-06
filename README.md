@@ -8,7 +8,7 @@ This is an alternative Python implementation of graph construction method RGCLI 
 
 > RGCLI execution
 
-    python -OO rgcli.pyo -f input/square.dat -l input/square.labels -1 20 -2 2
+    python -OO rgcli.pyo -f input/square.dat -l input/square.label -1 20 -2 2
 
 > Input: any numerical dataset with any delimiter for attributes
 
@@ -16,16 +16,16 @@ This is an alternative Python implementation of graph construction method RGCLI 
 
 **Parameters**
 
-| Option					| Domain					| Description															|
-|:------------------------- |:------------------------- |:--------------------------------------------------------------------- |
-| -f, --filename			| string [FILE]				| Dataset as input file													|
-| -o, --output				| string [FILE]				| Output file (default .ncol)											|
-| -l, --label				| string [FILE]				| List of labels points used to construct RGCLI 						|
-| -1, --ke					| [1,n] Integer interval	| ke for KNN															|
-| -2, --ki					| [1,n] Integer interval	| ki for RGCLI															|
-| -t, --threads				| [0,n] Integer interval	| Number of  threads													|
-| -e, --format				| ['ncol', 'pajek']			| Format output file													|
-| -c, --skip_last_column	| [0,n] Integer interval	| Skip the last column													|
+| Option					| Domain					| Required	| Default	| Description															|
+|:------------------------- |:------------------------- | --------- | --------- |:--------------------------------------------------------------------- |
+| -f, --filename			| string [FILE]				| yes		| -			| Dataset as input file													|
+| -o, --output				| string [FILE]				| no		| ncol		| Output file															|
+| -l, --label				| string [FILE]				| yes		| -			| List of labels points used to construct RGCLI 						|
+| -1, --ke					| [1,n] Integer interval	| no		| 20		| ke for KNN															|
+| -2, --ki					| [1,n] Integer interval	| no		| 2			| ki for RGCLI															|
+| -t, --threads				| [0,n] Integer interval	| no		| 4			| Number of  threads													|
+| -e, --format				| ['ncol', 'pajek']			| no		| ncol		| Format output file													|
+| -c, --skip_last_column	| bool						| no		| true		| Skip the last column													|
 
 **Dependencies**
 
