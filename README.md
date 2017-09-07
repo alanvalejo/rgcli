@@ -29,32 +29,36 @@ This is an alternative Python implementation of graph construction method RGCLI 
 
 **Dependencies**
 
-* Python: tested with version 2.7.13.
-* Packages needed: numpy, scipy and multiprocessing.
+* Python: tested with version 2.7.13
+* Packages needed: numpy, scipy and multiprocessing
 
 **Known Bugs**
 
-Please contact the author for problems and bug report.
+Please contact the author for problems and bug report
 
 **Contact**
 
-* Alan Valejo.
-* Ph.D. candidate at University of São Paolo (USP), Brazil.
-* alanvalejo@gmail.com.
+* Alan Valejo
+* Ph.D. candidate at University of São Paolo (USP), Brazil
+* alanvalejo@gmail.com
 
 **License**
 
-* Can be used for creating unlimited applications.
-* Can be distributed in binary or object form only.
-* Non-commercial use only.
+* Can be used for creating unlimited applications
+* Can be distributed in binary or object form only
+* Non-commercial use only
+* Can modify source-code and distribute modifications (derivative works)
+* Attribution to software creator must be made as specified.
 
 **Credit**
 
-Giving credit to the author by citing the paper [1] or sources.
+Giving credit to the author by citing the paper [1] or source [2].
 
 **References**
 
-> [1] Berton, Lilian; Faleiros, T.; Valejo, A.; Valverde-Rebaza, J.; and Lopes, A. A.: RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing, (2016)
+> [1] Berton, Lilian; Faleiros, T.; Valejo, A.; Valverde-Rebaza, J.; and Lopes, A. A.: RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing, (2016).
+
+> [2] https://github.com/alanvalejo/rgcli
 
 ~~~~~{.bib}
 @article{Berton_2016,
