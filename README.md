@@ -44,9 +44,9 @@ Please contact the author for problems and bug report.
 
 **License**
 
-Permission is hereby granted, free of charge, to personal and researcher user obtaining a copy of this software and associated documentation.
-
-For full commercial license contact the author.
+* Can be used for creating unlimited applications.
+* Can be distributed in binary or object form only.
+* Non-commercial use only.
 
 **Credit**
 
