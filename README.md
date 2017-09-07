@@ -68,5 +68,3 @@ Giving credit to the author by citing the paper [1] or source [2].
     year={2016}
 }
 ~~~~~
-
-<div class="footer"> &copy; Copyright (C) 2016 Alan Valejo &lt;alanvalejo@gmail.com&gt; All rights reserved.</div>
