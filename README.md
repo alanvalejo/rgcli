@@ -42,6 +42,16 @@ Please contact the author for problems and bug report.
 * Ph.D. candidate at University of São Paolo (USP), Brazil.
 * alanvalejo@gmail.com.
 
+**License**
+
+Permission is hereby granted, free of charge, to personal and researcher user obtaining a copy of this software and associated documentation.
+
+For full commercial license contact the author.
+
+**Credit**
+
+Giving credit to the author by citing the paper [1] or sources.
+
 **References**
 
 > [1] Berton, Lilian; Faleiros, T.; Valejo, A.; Valverde-Rebaza, J.; and Lopes, A. A.: RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing, (2016)
