@@ -64,3 +64,5 @@ Please contact the author for problems and bug report
     year={2016}
 }
 ~~~~~
+
+<div class="footer"> &copy; Copyright (C) 2016 Alan Valejo &lt;alanvalejo@gmail.com&gt; All rights reserved.</div>
