@@ -48,11 +48,7 @@ Please contact the author for problems and bug report
 * Can be distributed in binary or object form only
 * Non-commercial use only
 * Can modify source-code and distribute modifications (derivative works)
-* Attribution to software creator must be made as specified.
-
-**Credit**
-
-Giving credit to the author by citing the paper [1] or source [2].
+* Attribution to software creator must be made as specified: Giving credit to the author by citing the paper [1] or source [2]
 
 **References**
 
