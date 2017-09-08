@@ -7,4 +7,4 @@
 * Non-commercial use only
 * Can modify source-code and distribute modifications (derivative works)
 * Attribution to software creator must be made as specified:
-+ Giving credit to the author by citing the paper [1] or source [2]
+  + Giving credit to the author by citing the paper [1] or source [2]
