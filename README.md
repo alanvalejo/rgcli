@@ -48,13 +48,11 @@ Please contact the author for problems and bug report
 * Can be distributed in binary or object form only
 * Non-commercial use only
 * Can modify source-code and distribute modifications (derivative works)
-* Attribution to software creator must be made as specified: Giving credit to the author by citing the paper [1] or source [2]
+* Giving credit to the author by citing the paper [1]
 
 **References**
 
-> [1] Berton, Lilian; Faleiros, T.; Valejo, A.; Valverde-Rebaza, J.; and Lopes, A. A.: RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing, (2016).
-
-> [2] https://github.com/alanvalejo/rgcli
+> [1] Valejo, A.; Ferreira V.; Rocha Filho, G. P.; Oliveira, M. C. F.; and Lopes, A. A.: One-mode projection-based multilevel approach for community detection in bipartite networks. (2017)
 
 ~~~~~{.bib}
 @article{Berton_2016,
