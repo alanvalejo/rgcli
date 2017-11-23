@@ -52,7 +52,7 @@ Please contact the author for problems and bug report
 
 **References**
 
-> [1] Valejo, A.; Ferreira V.; Rocha Filho, G. P.; Oliveira, M. C. F.; and Lopes, A. A.: One-mode projection-based multilevel approach for community detection in bipartite networks. (2017)
+> [1] Lilian Berton and Thiago de Paulo Faleiros and Alan Valejo and Jorge Valverde-Rebaza and Alneu de Andrade Lopes: RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing. (2017)
 
 ~~~~~{.bib}
 @article{Berton_2016,
@@ -60,7 +60,7 @@ Please contact the author for problems and bug report
     Jorge Valverde-Rebaza and Alneu de Andrade Lopes},
     title={RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning},
     journal={Neurocomputing},
-    year={2016}
+    year={2017}
 }
 ~~~~~
 
