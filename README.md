@@ -49,6 +49,7 @@ Please contact the author for problems and bug report
 * Non-commercial use only
 * Can modify source-code and distribute modifications (derivative works)
 * Giving credit to the author by citing the paper [1]
+* License will expire in 2018, July
 
 **References**
 
