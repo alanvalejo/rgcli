@@ -5,6 +5,7 @@
 !.gitignore
 !COPYING.md
 !README.md
-!rgcli.pyo
-!helper.pyo
+!rgcli.so
+!main.py
+!input
 # etc...

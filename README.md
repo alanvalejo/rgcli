@@ -8,7 +8,7 @@ This is an alternative Python implementation of graph construction method RGCLI 
 
 > RGCLI execution
 
-    python -OO rgcli.pyo -f input/square.dat -l input/square.label -1 20 -2 2
+    python main.py -f input/square.dat -l input/square.label -1 20 -2 2 -d output
 
 > Input: any numerical dataset with any delimiter for attributes
 
