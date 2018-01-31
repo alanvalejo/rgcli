@@ -53,7 +53,7 @@ Please contact the author for problems and bug report
 
 **References**
 
-> [1] Lilian Berton and Thiago de Paulo Faleiros and Alan Valejo and Jorge Valverde-Rebaza and Alneu de Andrade Lopes: RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing. (2017)
+> [1] Lilian Berton and Thiago de Paulo Faleiros and Alan Valejo and Jorge Valverde-Rebaza and Alneu de Andrade Lopes: One-mode projection-based RGCLI: Robust Graph that Considers Labeled Instances for Semi-Supervised Learning. Neurocomputing. 2017
 
 ~~~~~{.bib}
 @article{Berton_2016,
