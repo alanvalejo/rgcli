@@ -42,14 +42,14 @@ Please contact the author for problems and bug report
 * Ph.D. candidate at University of São Paolo (USP), Brazil
 * alanvalejo@gmail.com
 
-**License**
+**License (COPYING.md)**
 
 * Can be used for creating unlimited applications
 * Can be distributed in binary or object form only
 * Non-commercial use only
 * Can modify source-code and distribute modifications (derivative works)
-* Giving credit to the author by citing the paper [1]
-* License will expire in 2018, July
+* Giving credit to the author by citing the papers [1]
+* License will expire in 2018, July, and will be renewed.
 
 **References**
 
