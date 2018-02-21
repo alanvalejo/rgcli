@@ -48,8 +48,8 @@ Please contact the author for problems and bug report
 * Can be distributed in binary or object form only
 * Non-commercial use only
 * Can modify source-code and distribute modifications (derivative works)
-* Giving credit to the author by citing the papers [1]
-* License will expire in 2018, July, and will be renewed.
+* Giving credit to the author by citing the papers
+* License will expire in 2018, July, and will be renewed
 
 **Download**
 
