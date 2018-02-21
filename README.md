@@ -6,7 +6,7 @@ This is an alternative Python implementation of graph construction method RGCLI 
 
 **Download**
 
-* You can download the MkNN software in http://www.alanvalejo.com.br/software?name=RGCLI
+* You can download the RGCLI software in http://www.alanvalejo.com.br/software?name=RGCLI
 
 **Usage**
 
