@@ -42,7 +42,7 @@ Please contact the author for problems and bug report
 * Ph.D. candidate at University of São Paolo (USP), Brazil
 * alanvalejo@gmail.com
 
-**License (COPYING.md)**
+**License (For a complete version of the license, see the COPYING.md)**
 
 * Can be used for creating unlimited applications
 * Can be distributed in binary or object form only
@@ -50,6 +50,10 @@ Please contact the author for problems and bug report
 * Can modify source-code and distribute modifications (derivative works)
 * Giving credit to the author by citing the papers [1]
 * License will expire in 2018, July, and will be renewed.
+
+**Download**
+
+* You can download the MkNN software in http://www.alanvalejo.com.br/software?id=2
 
 **References**
 
