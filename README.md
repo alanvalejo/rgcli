@@ -4,6 +4,10 @@
 
 This is an alternative Python implementation of graph construction method RGCLI (Robust Graph that Considers Labeled Instances), published by Berton and Lopes (2016) [1]. The implementation is based on kd-tree and Multi-threading and is faster than the original described in the paper, specially for large data sets.
 
+**Download**
+
+* You can download the MOb software in http://www.alanvalejo.com.br/software?name=rgcli
+
 **Usage**
 
 > RGCLI execution
