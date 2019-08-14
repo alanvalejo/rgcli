@@ -6,7 +6,7 @@ This is an alternative Python implementation of graph construction method RGCLI 
 
 **Download**
 
-* You can download the RGCLI software in http://www.alanvalejo.com.br/software?name=rgcli
+- You can download the RGCLI software in http://www.alanvalejo.com.br/software?name=rgcli
 
 **Usage**
 
@@ -32,25 +32,38 @@ This is an alternative Python implementation of graph construction method RGCLI 
 | -c, --skip_last_column	| bool						| no		| true		| skip the last column													|
 | -c, --skip_rows	        | [1,n-1]					| no		| None		| skip rows													            |
 
-**Dependencies**
+**Instal**
 
-* Python: tested with version 2.7.13
-* Packages needed: numpy, scipy and multiprocessing
+> Pip
+    
+    $ pip install -r /path/to/requirements.txt
+
+> Anaconda env
+
+    $ conda env create -f environment.yml
+    $ conda activate rgcli
+
+> Anaconda create
+
+    $ conda create --name rgcli python=3.7.2
+    $ conda activate rgcli
+    $ conda install -c anaconda numpy
+    $ conda install -c anaconda scipy 
 
 **Known Bugs**
 
-Please contact the author for problems and bug report
+- Please contact the author for problems and bug report
 
 **Contact**
 
-* Alan Valejo.
-* Ph.D. candidate at University of São Paolo (USP), Brazil.
-* alanvalejo@icmc.ups.br.
+- Alan Valejo.
+- Ph.D. candidate at University of São Paulo (USP), Brazil.
+- alanvalejo@icmc.ups.br.
 
 **License and credits**
 
-* The GNU General Public License v3.0
-* Giving credit to the author by citing the papers [1]
+- The GNU General Public License v3.0
+- Giving credit to the author by citing the papers [1]
 
 **References**
 
@@ -58,13 +71,13 @@ Please contact the author for problems and bug report
 
 ~~~~~{.bib}
 @article{berton2016rgcli,
-author = {Berton, Lilian and Faleiros, Thiago P. and Valejo, Alan and Valverde-Rebaza, Jorge Lopes, A. A.},
-title = {Rgcli: robust graph that considers labeled instances for semi-supervised learning},
-journal = {Neurocomputing},
-year = {2016},
-pages = {238-248},
-volume = {226},
-doi = {https://doi.org/10.1016/j.neucom.2016.11.053}
+    author = {Berton, Lilian and Faleiros, Thiago P. and Valejo, Alan and Valverde-Rebaza, Jorge Lopes, A. A.},
+    title = {Rgcli: robust graph that considers labeled instances for semi-supervised learning},
+    journal = {Neurocomputing},
+    year = {2016},
+    pages = {238-248},
+    volume = {226},
+    doi = {https://doi.org/10.1016/j.neucom.2016.11.053}
 }
 ~~~~~
 
